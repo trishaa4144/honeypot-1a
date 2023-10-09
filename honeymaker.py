@@ -11,13 +11,9 @@ fake_es = Faker("es_ES")
 num_records = 10  # Change this to the desired number of records
 faker_obj = fake_es  # Change to the language object you want
 all_courses = [
-    "Course1",
-    "Course2",
-    "Course3",
-    "Course4",
-    "Course5",
-    "Course6",
-]  # Modify this to UMD grad-level courses
+    "HACS", "CMSC", "MATH", "BMGT", "AMST", "ENES", "BIOE","STAT",
+    "BUFN", "CHEM", "PHYS", "HACS", "INST", "MSML", "HESI", "RUSS"
+]
 output_file = "contacts.json"  # Output file for contacts
 
 contacts = []
@@ -28,6 +24,11 @@ for _ in range(num_records):
 
     # Choose 3-6 random courses
     courses = random.sample(all_courses, random.randint(3, 6))
+
+    for i in range(len(courses)):
+        courses[i] += str(random.randint(6,8))
+        courses[i] += str(random.randint(0,9))
+        courses[i] += str(random.randint(0,9))
 
     contact = {
         'UID': uid,
