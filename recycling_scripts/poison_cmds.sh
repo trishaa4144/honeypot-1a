@@ -1,7 +1,10 @@
 #!/bin/bash
 
 
-# This script will create fake wget and curl commands that will record the malware an attacker downloads onto the container. It does so by creating new commands with the same name as wget and curl and moves the original commands into a separate folder so that the script for the fake commands can call the real commands.
+# This script will create fake wget and curl commands that will record the malware an attacker 
+# downloads onto the container. It does so by creating new commands with the same name as wget 
+# and curl and moves the original commands into a separate folder so that the script for the fake 
+# commands can call the real commands.
 
 
 # Make sure at least one argument, the name of the target container, is
@@ -20,7 +23,8 @@ then
   exit 2
 fi
 
-# Make a directory called .downloads in /var/log on the container, and give everyone execute permissions in it
+# Make a directory called .downloads in /var/log on the container, and give everyone execute 
+# permissions in it
 sudo lxc-attach -n "$1" -- mkdir /var/log/.downloads
 sudo lxc-attach -n "$1" -- chmod o+x /var/log/.downloads
 
