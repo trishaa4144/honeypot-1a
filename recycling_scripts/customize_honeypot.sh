@@ -30,17 +30,17 @@ case $language in
   "spanish")
     sudo lxc-attach -n "$container_name" -- bash -c 'sudo apt-get install -y language-pack-es'
     sudo lxc-attach -n "$container_name" -- bash -c 'sudo apt-get update'
-    sudo lxc-attach -n "$container_name" -- bash -c 'sudo update-locale LANGUAGE=es_ES.UTF-8'
+    sudo lxc-attach -n "$container_name" -- bash -c 'sudo update-locale LANG=es_ES.UTF-8 LANGUAGE=es_ES.UTF-8'
     ;;
   "russian")
     sudo lxc-attach -n "$container_name" -- bash -c 'sudo apt-get install -y language-pack-ru'
     sudo lxc-attach -n "$container_name" -- bash -c 'sudo apt-get update'
-    sudo lxc-attach -n "$container_name" -- bash -c 'sudo update-locale LANGUAGE=ru_RU.UTF-8'
+    sudo lxc-attach -n "$container_name" -- bash -c 'sudo update-locale LANG=ru_RU.UTF-8 LANGUAGE=ru_RU.UTF-8'
     ;;
   "chinese")
     sudo lxc-attach -n "$container_name" -- bash -c 'sudo apt-get install -y language-pack-zh-hans'
     sudo lxc-attach -n "$container_name" -- bash -c 'sudo apt-get update'
-    sudo lxc-attach -n "$container_name" -- bash -c 'sudo update-locale LANGUAGE=zh_CN.UTF-8'
+    sudo lxc-attach -n "$container_name" -- bash -c 'sudo update-locale LANG=ru_RU.UTF-8 LANGUAGE=zh_CN.UTF-8'
     ;;
   *)
     echo "Unsupported language. Use 'spanish' for Spanish, 'russian' for Russian, 'chinese' for Chinese, and 'english' for English."
