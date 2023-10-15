@@ -75,7 +75,7 @@ else
   # machine, and update the local language on the machine
 
   honey_type=$(shuf -n 1 -e english spanish russian chinese)
-  ./setup_script $container #honey_type
+  ./customize_honeypot $container_name $honey_type
 
   curr_time=$(date +"%s")
   seconds=$(($1 * 60))
