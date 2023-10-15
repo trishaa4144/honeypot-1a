@@ -6,9 +6,15 @@ from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
 import argparse
 
+
 def generate_fake_data(
     num_contact_records: int = 50, num_paper_dirs: int = 10, language: str = None
 ):
+    """
+    Generate subdirectory structure containing folders with random amounts of fake research papers,
+    data, and contacts in respective language. Saves honey into "generated" folder within the working
+    directory.
+    """
     faker_obj = None
     papers_dir = "papers"
     contacts_file = "contacts"
@@ -39,14 +45,19 @@ def generate_fake_data(
     else:
         faker_obj = Faker()
 
+    create_folder_structure("generated/" + papers_dir)
+
     generate_contacts(
-        faker_obj, contacts_file, num_contact_records, name_label, courses_label
+        faker_obj,
+        "generated/" + contacts_file + ".json",
+        num_contact_records,
+        name_label,
+        courses_label,
     )
 
     # Generate fake papers and data
-    create_folder_structure(papers_dir)
     for folder_num in range(1, num_paper_dirs):
-        papers_folder = os.path.join(papers_dir, f"{folder_num}")
+        papers_folder = os.path.join("generated/" + papers_dir, f"{folder_num}")
         for paper_num in range(1, random.randint(2, 10)):
             pdf_file = os.path.join(papers_folder, f"{papers_dir}_{paper_num}.pdf")
             c = canvas.Canvas(pdf_file, pagesize=letter)
@@ -97,8 +108,6 @@ def create_folder_structure(papers_dir):
 def generate_contacts(
     faker_obj, contacts_output_file, num_contact_records, name_label, courses_label
 ):
-    contacts_output_file = "contacts.json"
-
     contacts = []
     for _ in range(num_contact_records):
         uid = "".join(random.choices("ABCDEFGHIJKLMNOPQRSTUVWXYZ", k=8))
