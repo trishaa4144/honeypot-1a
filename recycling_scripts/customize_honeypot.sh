@@ -20,6 +20,9 @@ python3 ../honeymaker.py --language $language
 # rm -rf generated
 
 case $language in
+  "english")
+    # No need to change language settings for English.
+    ;;
   "spanish")
     sudo lxc-attach -n "$container_name" -- bash -c 'sudo apt-get install language-pack-es'
     sudo lxc-attach -n "$container_name" -- bash -c 'sudo update-locale LANG=es_ES.UTF-8'
