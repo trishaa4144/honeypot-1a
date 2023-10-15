@@ -37,7 +37,7 @@ if [[ -e time_$container_name ]]; then
     ip=$(sudo lxc-info -n "$container" -iH)
 
   # Copies all files in the .downloads directory of the container onto the host's directory named [container_name]_downloads
-  sudo cp -r /var/lib/lxc/$container/rootfs/var/log/.downloads $(echo $container)_downloads
+  sudo cp -r /var/lib/lxc/$container/rootfs/var/log/.downloads $(echo $container)_downloads_$(date --iso-8601=seconds)
   
   # Deletes the NAT rules that link the container to the MITM server
   sudo iptables --table nat --delete PREROUTING --source 0.0.0.0/0 -- destination $ext_ip --jump DNAT --to-destination $containerIP
