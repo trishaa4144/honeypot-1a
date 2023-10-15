@@ -1,7 +1,7 @@
 #!/bin/bash
 
 #Takes in one argument which is the name of the honeypot
-if [[ $# -lt 1 ]]
+if [[ $# -lt 1 ]]; then
     echo "Please enter the name of the honeypot you want to check on"
     exit 1
 fi
