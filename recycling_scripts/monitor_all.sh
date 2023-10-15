@@ -8,9 +8,9 @@ containers=(“server1”, “server2”, “server3”, “server4”)
 
 # For every honeypot
 for index in {0..3}; do
-	# Grab its name from the array containers[]
-	container="${containers[$index]}"
+    # Grab its name from the array containers[]
+    container="${containers[$index]}"
     # Run the monitoring script on the selected honeypot
     ./monitoring.sh $container
-done	
+done
 
