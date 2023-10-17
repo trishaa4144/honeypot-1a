@@ -40,9 +40,9 @@ if [[ -e time_$container_name ]]; then
   sudo cp -r /var/lib/lxc/$container/rootfs/var/log/.downloads $(echo $container)_downloads_$(date --iso-8601=seconds)
   
   # Deletes the NAT rules that link the container to the MITM server
-  sudo iptables --table nat --delete PREROUTING --source 0.0.0.0/0 -- destination $ext_ip --jump DNAT --to-destination $containerIP
+  sudo iptables --table nat --delete PREROUTING --source 0.0.0.0/0 --destination $ext_ip --jump DNAT --to-destination $containerIP
 
-  sudo iptables --table nat --delete POSTROUTING --source $containerIP -- destination 0.0.0.0/0 --jump SNAT --to-source $ext_ip
+  sudo iptables --table nat --delete POSTROUTING --source $containerIP --destination 0.0.0.0/0 --jump SNAT --to-source $ext_ip
 
   # Deletes the MITM NAT rule
   sudo iptables --table nat --delete PREROUTING --source 0.0.0.0/0 --destination $ext_ip --protocol tcp --dport 22 --jump DNAT --to-destination 127.0.0.1:4567
