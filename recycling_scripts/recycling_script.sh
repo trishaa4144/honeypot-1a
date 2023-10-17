@@ -53,7 +53,7 @@ if [[ -e time_$container_name ]]; then
   # Log container stopping time and remove ‘time’ file
   echo "$container stopped at $(date --iso-8601=seconds)"
   rm time
-fi
+  fi
 
 # Call the script on itself at the end here. This ensures that once a
 # container is deleted, it immediately starts up another one.
@@ -82,7 +82,7 @@ else
   goal_time=$((curr_time + seconds))
 
   # Create ‘time’ file with container name and goal time
-  echo "$2 $goal_time" > time_$container_name
+  echo "$container_name $goal_time" > time_$container_name
 
   container_ip=$(sudo lxc-info -n "$container" -iH)
 
