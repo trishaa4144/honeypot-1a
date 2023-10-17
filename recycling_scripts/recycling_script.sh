@@ -34,15 +34,15 @@ if [[ -e time_$container_name ]]; then
     echo "container $container_name not ready to be recycled"
   else
     # Retrieve internal IP of container
-    ip=$(sudo lxc-info -n "$container_name" -iH)
+    container_ip=$(sudo lxc-info -n "$container_name" -iH)
 
     # Copies all files in the .downloads directory of the container onto the host's directory named [container_name]_downloads
     sudo cp -r /var/lib/lxc/$container_name/rootfs/var/log/.downloads $(echo $container_name)_downloads_$(date --iso-8601=seconds)
   
     # Deletes the NAT rules that link the container to the MITM server
-    sudo iptables --table nat --delete PREROUTING --source 0.0.0.0/0 --destination $ext_ip --jump DNAT --to-destination $ip
+    sudo iptables --table nat --delete PREROUTING --source 0.0.0.0/0 --destination $ext_ip --jump DNAT --to-destination $container_ip
 
-    sudo iptables --table nat --delete POSTROUTING --source $ip --destination 0.0.0.0/0 --jump SNAT --to-source $ext_ip
+    sudo iptables --table nat --delete POSTROUTING --source $container_ip --destination 0.0.0.0/0 --jump SNAT --to-source $ext_ip
 
     # Deletes the MITM NAT rule
     sudo iptables --table nat --delete PREROUTING --source 0.0.0.0/0 --destination $ext_ip --protocol tcp --dport 22 --jump DNAT --to-destination 127.0.0.1:4567
@@ -52,7 +52,7 @@ if [[ -e time_$container_name ]]; then
     sudo lxc-destroy -n $container_name
     # Log container stopping time and remove ‘time’ file
     echo "$container_name stopped at $(date --iso-8601=seconds)"
-    rm time
+    rm time_$container_name
   fi
 
   # Call the script on itself at the end here. This ensures that once a
@@ -84,7 +84,7 @@ else
   # Create ‘time’ file with container name and goal time
   echo "$container_name $goal_time" > time_$container_name
 
-  container_ip=$(sudo lxc-info -n "$container" -iH)
+  container_ip=$(sudo lxc-info -n "$container_name" -iH)
 
   # Set up MITM server
   if [[ ! -d ~/mitm_logs ]]; then
