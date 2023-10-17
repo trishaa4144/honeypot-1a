@@ -32,6 +32,7 @@ if [[ -e time_$container_name ]]; then
   # Check if it’s time to recycle the container
   if [ $curr_time -lt $goal_time ]; then
     echo "container $container_name not ready to be recycled"
+    exit 0
   else
     # Retrieve internal IP of container
     container_ip=$(sudo lxc-info -n "$container_name" -iH)
@@ -53,6 +54,7 @@ if [[ -e time_$container_name ]]; then
     # Log container stopping time and remove ‘time’ file
     echo "$container_name stopped at $(date --iso-8601=seconds)"
     rm time_$container_name
+    exit 0
   fi
 
   # Call the script on itself at the end here. This ensures that once a
@@ -105,5 +107,6 @@ else
 
   # Sets up the SSH port forwarding
   sudo iptables --table nat --insert PREROUTING --source 0.0.0.0/0 --destination $ext_ip --protocol tcp --dport 22 --jump DNAT --to-destination 127.0.0.1:4567
+  exit 0
 fi
 
