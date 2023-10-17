@@ -63,7 +63,7 @@ else
 
   sudo lxc-create -n $container_name -t download -- -d ubuntu -r focal -a amd64
 
-  sudo lxc-start -n container_name
+  sudo lxc-start -n $container_name
 
   echo "$container_name started at $(date --iso-8601=seconds) with honey type $honey_type"
 
