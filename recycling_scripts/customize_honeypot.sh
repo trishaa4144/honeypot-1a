@@ -14,10 +14,10 @@ language=$2
 echo $language
 
 # Generate honey for respective language. Will save to a folder named "generated"
-python3 ../honeymaker.py --language $language
+python3 ~/honeypot-1a/honeymaker.py --language $language
 
 # Add functionality to copy generated files/folders from "generated" folder to the container.
-sudo cp -r ../generated/* /var/lib/lxc/$container_name/rootfs/root
+sudo cp -r ~/honeypot-1a/generated/* /var/lib/lxc/$container_name/rootfs/root
 
 # Remove "generated" folder from container
 rm -rf generated
