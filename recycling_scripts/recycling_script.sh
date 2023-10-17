@@ -96,7 +96,7 @@ else
 
   sudo forever -l ~/mitm_logs/$container_name.log start ~/MITM/mitm.js -n $container_name -i $container_ip -p 4567 --auto-access --auto-access-fixed 3 --debug
 
-  sudo ip addr add $ext_ip/16 brd + dev eth1
+  sudo ip addr add $ext_ip/24 brd + dev eth1
 
   # Makes it so the container can communicate back and forth with said external IP
   sudo iptables --table nat --insert PREROUTING --source 0.0.0.0/0 --destination $ext_ip --jump DNAT --to-destination $container_ip
