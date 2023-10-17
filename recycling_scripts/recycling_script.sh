@@ -22,42 +22,42 @@ fi
 num_min=$1
 ext_ip=$2
 container_name=$3
+
 # Checks if “time” file exists for the current container
 if [[ -e time_$container_name ]]; then
   # Read values from time file
-  container=$(cat time_$container_name | cut -d' ' -f1)
   goal_time=$(cat time_$container_name | cut -d' ' -f2)
   curr_time=$(date +"%s")
 
   # Check if it’s time to recycle the container
   if [ $curr_time -lt $goal_time ]; then
-    echo "container $container not ready to be recycled"
+    echo "container $container_name not ready to be recycled"
   else
     # Retrieve internal IP of container
-    ip=$(sudo lxc-info -n "$container" -iH)
+    ip=$(sudo lxc-info -n "$container_name" -iH)
 
-  # Copies all files in the .downloads directory of the container onto the host's directory named [container_name]_downloads
-  sudo cp -r /var/lib/lxc/$container/rootfs/var/log/.downloads $(echo $container)_downloads_$(date --iso-8601=seconds)
+    # Copies all files in the .downloads directory of the container onto the host's directory named [container_name]_downloads
+    sudo cp -r /var/lib/lxc/$container_name/rootfs/var/log/.downloads $(echo $container_name)_downloads_$(date --iso-8601=seconds)
   
-  # Deletes the NAT rules that link the container to the MITM server
-  sudo iptables --table nat --delete PREROUTING --source 0.0.0.0/0 --destination $ext_ip --jump DNAT --to-destination $containerIP
+    # Deletes the NAT rules that link the container to the MITM server
+    sudo iptables --table nat --delete PREROUTING --source 0.0.0.0/0 --destination $ext_ip --jump DNAT --to-destination $ip
 
-  sudo iptables --table nat --delete POSTROUTING --source $containerIP --destination 0.0.0.0/0 --jump SNAT --to-source $ext_ip
+    sudo iptables --table nat --delete POSTROUTING --source $ip --destination 0.0.0.0/0 --jump SNAT --to-source $ext_ip
 
-  # Deletes the MITM NAT rule
-  sudo iptables --table nat --delete PREROUTING --source 0.0.0.0/0 --destination $ext_ip --protocol tcp --dport 22 --jump DNAT --to-destination 127.0.0.1:4567
+    # Deletes the MITM NAT rule
+    sudo iptables --table nat --delete PREROUTING --source 0.0.0.0/0 --destination $ext_ip --protocol tcp --dport 22 --jump DNAT --to-destination 127.0.0.1:4567
 
-  # Deletes the container entirely as it is ready to be recycled
-  sudo lxc-stop -n $container_name
-  sudo lxc-destroy -n $container_name
-  # Log container stopping time and remove ‘time’ file
-  echo "$container stopped at $(date --iso-8601=seconds)"
-  rm time
+    # Deletes the container entirely as it is ready to be recycled
+    sudo lxc-stop -n $container_name
+    sudo lxc-destroy -n $container_name
+    # Log container stopping time and remove ‘time’ file
+    echo "$container_name stopped at $(date --iso-8601=seconds)"
+    rm time
   fi
 
-# Call the script on itself at the end here. This ensures that once a
-# container is deleted, it immediately starts up another one.
-./recycling_script.sh $num_min $ext_ip $container_name
+  # Call the script on itself at the end here. This ensures that once a
+  # container is deleted, it immediately starts up another one.
+  ./recycling_script.sh $num_min $ext_ip $container_name
 else
   # Start a container with the ip address ($2), container name ($3)
 
@@ -94,7 +94,7 @@ else
   sudo sysctl -w net.ipv4.conf.all.route_localnet=1
   sudo npm install -g forever
 
-  sudo forever -l ~/mitm_logs/$container.log start ~/MITM/mitm.js -n $container -i $container_ip -p 4567 --auto-access --auto-access-fixed 3 --debug
+  sudo forever -l ~/mitm_logs/$container_name.log start ~/MITM/mitm.js -n $container_name -i $container_ip -p 4567 --auto-access --auto-access-fixed 3 --debug
 
   sudo ip addr add $ext_ip/16 brd + dev eth1
 
