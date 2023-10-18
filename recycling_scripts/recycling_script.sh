@@ -49,7 +49,7 @@ if [[ -e time_$container_name ]]; then
     fi
 
     # Copies all files in the .downloads directory of the container onto the host's directory named [container_name]_downloads
-    sudo cp -r /var/lib/lxc/$container_name/rootfs/var/log/.downloads ~/malware_downloads/"$honey_type"/$(echo $container_name)_downloads_$(date --iso-8601=seconds)
+    sudo cp -r /var/lib/lxc/$container_name/rootfs/var/log/.downloads ~/malware_downloads/$(cat honey_$container_name)/$(date --iso-8601=seconds)
   
     # Deletes the NAT rules that link the container to the MITM server
     sudo iptables --table nat --delete PREROUTING --source 0.0.0.0/0 --destination $ext_ip --jump DNAT --to-destination $container_ip
@@ -99,6 +99,8 @@ else
 
   # Create ‘time’ file with container name and goal time
   echo "$container_name $goal_time" > time_$container_name
+
+  echo $honey_type > honey_$container_name
 
   container_ip=$(sudo lxc-info -n "$container_name" -iH)
 
