@@ -108,7 +108,7 @@ else
   sudo sysctl -w net.ipv4.conf.all.route_localnet=1
   sudo npm install -g forever
 
-  sudo forever -l ~/mitm_logs/"$honey_type"/"$container_name"\_"$date".log start ~/MITM/mitm.js -n "$container_name" -i "$container_ip" -p 4567 --auto-access --auto-access-fixed 3 --debug
+  sudo forever -l ~/mitm_logs/"$honey_type"/"$container_name"\_"$date".log start ~/MITM/mitm.js -n "$container_name" -i "$container_ip" -p "$port_num" --auto-access --auto-access-fixed 3 --debug
 
   sudo ip addr add "$ext_ip"/24 brd + dev eth1
 
