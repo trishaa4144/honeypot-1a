@@ -9,3 +9,4 @@ HACS200 Honeypot - Group 1A - Honeybees
 5. Crontab setup: 
     - Script `/recycling_scripts/check_container.sh` should run every minute.
     - Script `/recycling_scripts/firewall_rules.sh` should run @ reboot.
+    - Script `/recycling_scripts/monitor_all.sh` should run every 15 minutes (Performs health check).
