@@ -29,7 +29,7 @@ sudo lxc-attach -n "$1" -- mkdir /var/log/.downloads
 sudo lxc-attach -n "$1" -- chmod o+x /var/log/.downloads
 
 # Install wget in case the container doesn’t have it
-sudo lxc-attach -n "$1" -- bash -c 'sudo apt install -y wget'
+sudo lxc-attach -n "$1" -- bash -c 'sudo apt-get install -y wget'
 
 # Create a file with a script that creates the fake wget command, which
 # sends the results of wget to .downloads then actually performs wget
@@ -46,7 +46,7 @@ sudo lxc-attach -n "$1" -- bash -c 'mv f_wget /usr/bin/wget'
 sudo lxc-attach -n "$1" -- bash -c 'chmod o+x /usr/bin/wget'
 
 # Install curl in case the container doesn’t have it
-sudo lxc-attach -n "$1" -- bash -c 'sudo apt install -y curl'
+sudo lxc-attach -n "$1" -- bash -c 'sudo apt-get install -y curl'
 
 # Create a file with a script that creates the fake curl command, which
 # Sends the results of curl to .downloads then actually performs curl
