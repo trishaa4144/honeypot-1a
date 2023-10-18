@@ -98,17 +98,17 @@ else
   sudo sysctl -w net.ipv4.conf.all.route_localnet=1
   sudo npm install -g forever
 
-  sudo forever -l ~/mitm_logs/$container_name\_$date.log start ~/MITM/mitm.js -n $container_name -i $container_ip -p 4567 --auto-access --auto-access-fixed 3 --debug
+  sudo forever -l ~/mitm_logs/"$container_name"\_"$date".log start ~/MITM/mitm.js -n "$container_name" -i "$container_ip" -p 4567 --auto-access --auto-access-fixed 3 --debug
 
-  sudo ip addr add $ext_ip/24 brd + dev eth1
+  sudo ip addr add "$ext_ip"/24 brd + dev eth1
 
   # Makes it so the container can communicate back and forth with said external IP
-  sudo iptables --table nat --insert PREROUTING --source 0.0.0.0/0 --destination $ext_ip --jump DNAT --to-destination $container_ip
+  sudo iptables --table nat --insert PREROUTING --source 0.0.0.0/0 --destination "$ext_ip" --jump DNAT --to-destination "$container_ip"
 
-  sudo iptables --table nat --insert POSTROUTING --source $container_ip --destination 0.0.0.0/0 --jump SNAT --to-source $ext_ip
+  sudo iptables --table nat --insert POSTROUTING --source "$container_ip" --destination 0.0.0.0/0 --jump SNAT --to-source "$ext_ip"
 
   # Sets up the SSH port forwarding
-  sudo iptables --table nat --insert PREROUTING --source 0.0.0.0/0 --destination $ext_ip --protocol tcp --dport 22 --jump DNAT --to-destination 127.0.0.1:4567
+  sudo iptables --table nat --insert PREROUTING --source 0.0.0.0/0 --destination "$ext_ip" --protocol tcp --dport 22 --jump DNAT --to-destination 127.0.0.1:4567
   exit 0
 fi
 
