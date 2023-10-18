@@ -70,12 +70,13 @@ if [[ -e time_$container_name ]]; then
     # so on and so forth
     sudo forever stop 0
 
+    # Call the script on itself at the end here. This ensures that once a
+    # container is deleted, it immediately starts up another one.
+    ./recycling_script.sh $num_min $ext_ip $container_name $port_num
+
     exit 0
   fi
 
-  # Call the script on itself at the end here. This ensures that once a
-  # container is deleted, it immediately starts up another one.
-  ./recycling_script.sh $num_min $ext_ip $container_name $port_num
 else
   # Start a container with the ip address ($2), container name ($3)
 
