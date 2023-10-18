@@ -12,6 +12,7 @@
 # honeypots, we can easily modify these two lines with correct names. 
 containers=(“server1”, “server2”, “server3”, “server4”)
 ips=(“ip1”,“ip2”,“ip3”,“ip4”)
+ports=("1297", "5420", "3956", "2145")
 
 # Iterate through container/ip indices and call recycling script on
 # each container-ip pair. Pass in a random value between 45 - 60 minutes.
@@ -21,11 +22,12 @@ for index in {0..3}; do
 	# Grab container name, ip address from arrays
 	container="${containers[$index]}"
 	ip_address="${ips[$index]}"
+	port_num="${ports[$index]}"
 
 	# Obtain random minute count between 45-60 minutes
 	minutes=$((RANDOM % 16 + 45))
 
 	# Call recycling script on respective container
-	./recycling_script.sh "$minutes" "$ip_address" "$container"
+	./recycling_script.sh "$minutes" "$ip_address" "$container" "$port_num"
 done	
 

@@ -14,14 +14,15 @@
 
 
 # Checks that 3 command line arguments (number of minutes, IP address, and container name)
-if [[ $# -ne 3 ]]; then
-  echo "Provide three shell arguments for the number of minutes to run the  container, the public IP address, and the assigned container name."
+if [[ $# -ne 4 ]]; then
+  echo "Provide three shell arguments for the number of minutes to run the  container, the public IP address, the assigned container name, and the port number of the MITM server."
   exit 1
 fi
 
 num_min=$1
 ext_ip=$2
 container_name=$3
+port_num=$4
 
 # Checks if “time” file exists for the current container
 if [[ -e time_$container_name ]]; then
@@ -46,7 +47,7 @@ if [[ -e time_$container_name ]]; then
     sudo iptables --table nat --delete POSTROUTING --source $container_ip --destination 0.0.0.0/0 --jump SNAT --to-source $ext_ip
 
     # Deletes the MITM NAT rule
-    sudo iptables --table nat --delete PREROUTING --source 0.0.0.0/0 --destination $ext_ip --protocol tcp --dport 22 --jump DNAT --to-destination 127.0.0.1:4567
+    sudo iptables --table nat --delete PREROUTING --source 0.0.0.0/0 --destination $ext_ip --protocol tcp --dport 22 --jump DNAT --to-destination 127.0.0.1:"$port_num"
 
     # Deletes the container entirely as it is ready to be recycled
     sudo lxc-stop -n $container_name
@@ -66,7 +67,7 @@ if [[ -e time_$container_name ]]; then
 
   # Call the script on itself at the end here. This ensures that once a
   # container is deleted, it immediately starts up another one.
-  ./recycling_script.sh $num_min $ext_ip $container_name
+  ./recycling_script.sh $num_min $ext_ip $container_name $port_num
 else
   # Start a container with the ip address ($2), container name ($3)
 
@@ -115,7 +116,7 @@ else
   sudo iptables --table nat --insert POSTROUTING --source "$container_ip" --destination 0.0.0.0/0 --jump SNAT --to-source "$ext_ip"
 
   # Sets up the SSH port forwarding
-  sudo iptables --table nat --insert PREROUTING --source 0.0.0.0/0 --destination "$ext_ip" --protocol tcp --dport 22 --jump DNAT --to-destination 127.0.0.1:4567
+  sudo iptables --table nat --insert PREROUTING --source 0.0.0.0/0 --destination "$ext_ip" --protocol tcp --dport 22 --jump DNAT --to-destination 127.0.0.1:"$port_num"
   exit 0
 fi
 
