@@ -70,7 +70,7 @@ if [[ -e time_$container_name ]]; then
 else
   # Start a container with the ip address ($2), container name ($3)
 
-  sudo lxc-create -y -n $container_name -t download -- -d ubuntu -r focal -a amd64
+  sudo lxc-create -n $container_name -t download -- -d ubuntu -r focal -a amd64
 
   sudo lxc-start -n $container_name
 
