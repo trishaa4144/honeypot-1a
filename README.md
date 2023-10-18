@@ -10,3 +10,7 @@ HACS200 Honeypot - Group 1A - Honeybees
     - Script `/recycling_scripts/check_container.sh` should run every minute.
     - Script `/recycling_scripts/firewall_rules.sh` should run @ reboot.
     - Script `/recycling_scripts/monitor_all.sh` should run every 15 minutes (Performs health check).
+6. Netdata configuration: You will need to add your claim token and claim rooms token to your environment.
+    - Modify ~/.zshrc to include the following lines
+         - `export NETDATA_CLAIM_TOKEN=your_claim_token_here`
+         - `export NETDATA_CLAIM_ROOMS=your_claim_rooms_token_here`
