@@ -24,6 +24,8 @@ ext_ip=$2
 container_name=$3
 port_num=$4
 
+honey_type=$(shuf -n 1 -e english spanish russian chinese)
+
 # Checks if “time” file exists for the current container
 if [[ -e time_$container_name ]]; then
   # Read values from time file
@@ -56,9 +58,6 @@ if [[ -e time_$container_name ]]; then
     echo "$container_name stopped at $(date --iso-8601=seconds)"
     rm time_$container_name
 
-    # !!!!! REPLACE [file_name] WITH FORMATTING OF ACTUAL SESSION STREAM !!!!
-    # cp ~/MITM/logs/session_streams/[file_name] ~/mitm_sessions/$(date --iso-8601)/$container_name\_session_$(date --iso-8601).log
-
     # FIND WAY TO GET UID AND STOP PARTICULAR MITM INSTANCE
     # forever stop <index #/uid>
 
@@ -84,7 +83,6 @@ else
   # We will call external scripts to move the honey onto the
   # machine, and update the local language on the machine
 
-  honey_type=$(shuf -n 1 -e english spanish russian chinese)
   ./customize_honeypot.sh $container_name $honey_type
 
   curr_time=$(date +"%s")
@@ -97,8 +95,12 @@ else
   container_ip=$(sudo lxc-info -n "$container_name" -iH)
 
   # Set up MITM server
-  if [[ ! -d ~/mitm_logs ]]; then
-    mkdir ~/mitm_logs
+  if [[ ! -d ~/mitm_logs/ ]]; then
+    mkdir ~/mitm_logs/
+  fi
+
+  if [[ ! -d ~/mitm_logs/"$honey_type" ]]; then
+    mkdir ~/mitm_logs/"$honey_type"
   fi
 
   date=$(date --iso-8601=seconds)
