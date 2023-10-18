@@ -40,8 +40,16 @@ if [[ -e time_$container_name ]]; then
     # Retrieve internal IP of container
     container_ip=$(sudo lxc-info -n "$container_name" -iH)
 
+    if [[ ! -d ~/malware_downloads/ ]]; then
+    mkdir ~/malware_downloads/
+    fi
+
+    if [[ ! -d ~/malware_downloads/"$honey_type" ]]; then
+      mkdir ~/malware_downloads/"$honey_type"
+    fi
+
     # Copies all files in the .downloads directory of the container onto the host's directory named [container_name]_downloads
-    sudo cp -r /var/lib/lxc/$container_name/rootfs/var/log/.downloads $(echo $container_name)_downloads_$(date --iso-8601=seconds)
+    sudo cp -r /var/lib/lxc/$container_name/rootfs/var/log/.downloads ~/malware_downloads/"$honey_type"/$(echo $container_name)_downloads_$(date --iso-8601=seconds)
   
     # Deletes the NAT rules that link the container to the MITM server
     sudo iptables --table nat --delete PREROUTING --source 0.0.0.0/0 --destination $ext_ip --jump DNAT --to-destination $container_ip
