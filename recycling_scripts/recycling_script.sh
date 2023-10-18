@@ -54,6 +54,13 @@ if [[ -e time_$container_name ]]; then
     # Log container stopping time and remove ‘time’ file
     echo "$container_name stopped at $(date --iso-8601=seconds)"
     rm time_$container_name
+
+    # !!!!! REPLACE [file_name] WITH FORMATTING OF ACTUAL SESSION STREAM !!!!
+    # cp ~/MITM/logs/session_streams/[file_name] ~/mitm_sessions/$(date --iso-8601)/$container_name\_session_$(date --iso-8601).log
+
+    # FIND WAY TO GET UID AND STOP PARTICULAR MITM INSTANCE
+    # forever stop <index #/uid>
+    
     exit 0
   fi
 
