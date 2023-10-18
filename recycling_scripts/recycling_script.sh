@@ -66,8 +66,9 @@ if [[ -e time_$container_name ]]; then
     echo "$container_name stopped at $(date --iso-8601=seconds)"
     rm time_$container_name
 
-    # FIND WAY TO GET UID AND STOP PARTICULAR MITM INSTANCE
-    # forever stop <index #/uid>
+    # Done this way because after the first instance is done, the container after that to be deleted will be shifted up to uid 0,
+    # so on and so forth
+    sudo forever stop 0
 
     exit 0
   fi
