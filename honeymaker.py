@@ -45,11 +45,13 @@ def generate_fake_data(
     else:
         faker_obj = Faker()
 
-    create_folder_structure("/home/student/generated/" + papers_dir)
+    save_dir = f"/home/student/generated/{language}/"
+
+    create_folder_structure(save_dir + papers_dir)
 
     generate_contacts(
         faker_obj,
-        "/home/student/generated/" + contacts_file + ".json",
+        save_dir + contacts_file + ".json",
         num_contact_records,
         name_label,
         courses_label,
@@ -57,7 +59,7 @@ def generate_fake_data(
 
     # Generate fake papers and data
     for folder_num in range(1, num_paper_dirs):
-        papers_folder = os.path.join("/home/student/generated/" + papers_dir, f"{folder_num}")
+        papers_folder = os.path.join(save_dir + papers_dir, f"{folder_num}")
         for paper_num in range(1, random.randint(2, 10)):
             pdf_file = os.path.join(papers_folder, f"{papers_dir}_{paper_num}.pdf")
             c = canvas.Canvas(pdf_file, pagesize=letter)
@@ -133,6 +135,10 @@ def generate_contacts(
 
     print("Contacts data saved to", contacts_output_file)
 
+def generate_all_data(contacts, papers):
+    for language in ["english", "russian", "chinese", "spanish"]:
+        generate_fake_data(contacts, papers, language)
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Generate contacts & research data.")
@@ -151,4 +157,5 @@ if __name__ == "__main__":
     )
     args = parser.parse_args()
 
-    generate_fake_data(args.contacts, args.papers, args.language)
+    # generate_fake_data(args.contacts, args.papers, args.language)
+    generate_all_data(args.contacts, args.papers)
