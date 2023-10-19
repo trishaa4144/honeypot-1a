@@ -79,6 +79,8 @@ if [[ -e /home/student/hpotinfo/time_$container_name ]]; then
     echo "$container_name stopped at $(date --iso-8601=seconds)"
     rm /home/student/hpotinfo/time_$container_name
 
+    sleep 5
+
     # Call the script on itself at the end here. This ensures that once a
     # container is deleted, it immediately starts up another one.
     /home/student/honeypot-1a/recycling_scripts/recycling_script.sh $num_min $ext_ip $container_name $port_num
