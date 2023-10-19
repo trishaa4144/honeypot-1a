@@ -27,9 +27,6 @@ sudo cp -r "/home/student/generated/$language/"* /var/lib/lxc/$container_name/ro
 # Set up to run a script on shell start that will copy the files from home to the home
 # directory of each individual user.
 
-# Remove "generated" folder from container
-rm -rf "/home/student/generated/"
-
 sudo lxc-attach -n "$container_name" -- bash -c 'sudo apt-get update'
 case $language in
   "english")
