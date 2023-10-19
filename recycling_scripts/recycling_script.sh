@@ -85,6 +85,7 @@ else
   sudo lxc-start -n $container_name
 
   echo "$container_name started at $(date --iso-8601=seconds) with honey type $honey_type"
+  sleep 5
 
   # Set up netdata in container
   sudo lxc-attach -n "$container_name" -- bash -c "sudo apt-get install -y wget"
