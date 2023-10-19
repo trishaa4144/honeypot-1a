@@ -87,8 +87,8 @@ else
   echo "$container_name started at $(date --iso-8601=seconds) with honey type $honey_type"
 
   # Set up netdata in container
-  sudo lxc-attach -n "$container_name" -- bash -c `sudo apt-get install -y wget`
-  sudo lxc-attach -n "$container_name" -- bash -c `wget -O /tmp/netdata-kickstart.sh https://my-netdata.io/kickstart.sh && sh /tmp/netdata-kickstart.sh --dont-wait --nightly-channel --claim-token $NETDATA_CLAIM_TOKEN --claim-rooms $NETDATA_CLAIM_ROOMS --claim-url https://app.netdata.cloud`
+  sudo lxc-attach -n "$container_name" -- bash -c "sudo apt-get install -y wget"
+  sudo lxc-attach -n "$container_name" -- bash -c "wget -O /tmp/netdata-kickstart.sh https://my-netdata.io/kickstart.sh && sh /tmp/netdata-kickstart.sh --dont-wait --nightly-channel --claim-token $NETDATA_CLAIM_TOKEN --claim-rooms $NETDATA_CLAIM_ROOMS --claim-url https://app.netdata.cloud"
 
   # Perform logic for command poisoning on the honeypot
   ./poison_cmds.sh $container_name
