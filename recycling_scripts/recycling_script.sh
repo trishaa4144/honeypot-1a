@@ -64,7 +64,11 @@ if [[ -e /home/student/hpotinfo/time_$container_name ]]; then
     
     sudo forever list > testfile
 
-    sudo forever stop $(cat testfile | grep -w $container_name | cut -d " " -f5 | sed 's/[][]//g')
+    process=$(cat testfile | grep -w $container_name | cut -d " " -f5 | sed 's/[][]//g')
+
+    echo "Process to stop: $process"
+
+    sudo forever stop "$process"
 
     rm testfile
 
