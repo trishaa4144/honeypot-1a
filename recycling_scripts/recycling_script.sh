@@ -81,7 +81,7 @@ if [[ -e time_$container_name ]]; then
 
     # Call the script on itself at the end here. This ensures that once a
     # container is deleted, it immediately starts up another one.
-    ./recycling_script.sh $num_min $ext_ip $container_name $port_num
+    /home/student/honeypot-1a/recycling_scripts/recycling_script.sh $num_min $ext_ip $container_name $port_num
 
     exit 0
   fi
@@ -101,13 +101,13 @@ else
   sudo lxc-attach -n "$container_name" -- bash -c "wget -O /tmp/netdata-kickstart.sh https://my-netdata.io/kickstart.sh && sh /tmp/netdata-kickstart.sh --dont-wait --nightly-channel --claim-token $NETDATA_CLAIM_TOKEN --claim-rooms $NETDATA_CLAIM_ROOMS --claim-url https://app.netdata.cloud"
 
   # Perform logic for command poisoning on the honeypot
-  ./poison_cmds.sh $container_name
+  /home/student/honeypot-1a/recycling_scripts/poison_cmds.sh $container_name
 
   # Perform logic for moving random honey onto container
   # We will call external scripts to move the honey onto the
   # machine, and update the local language on the machine
 
-  ./customize_honeypot.sh $container_name $honey_type
+  /home/student/honeypot-1a/recycling_scripts/customize_honeypot.sh $container_name $honey_type
 
   curr_time=$(date +"%s")
   seconds=$(($1 * 60))

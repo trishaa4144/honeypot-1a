@@ -30,6 +30,6 @@ for index in {0..3}; do
 	minutes=$((RANDOM % 3 + 2))
 
 	# Call recycling script on respective container
-	./recycling_script.sh "$minutes" "$ip_address" "$container" "$port_num"
+	/home/student/honeypot-1a/recycling_scripts/recycling_script.sh "$minutes" "$ip_address" "$container" "$port_num"
 done	
 
