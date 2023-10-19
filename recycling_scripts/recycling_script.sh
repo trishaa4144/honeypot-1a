@@ -37,6 +37,10 @@ if [[ -e time_$container_name ]]; then
     echo "container $container_name not ready to be recycled"
     exit 0
   else
+    # Log container stopping time and remove ‘time’ file
+    echo "$container_name stopping at $(date --iso-8601=seconds)"
+    rm time_$container_name
+
     # Retrieve internal IP of container
     container_ip=$(sudo lxc-info -n "$container_name" -iH)
 
@@ -62,9 +66,6 @@ if [[ -e time_$container_name ]]; then
     # Deletes the container entirely as it is ready to be recycled
     sudo lxc-stop -n $container_name
     sudo lxc-destroy -n $container_name
-    # Log container stopping time and remove ‘time’ file
-    echo "$container_name stopped at $(date --iso-8601=seconds)"
-    rm time_$container_name
 
     # Done this way because after the first instance is done, the container after that to be deleted will be shifted up to uid 0,
     # so on and so forth
