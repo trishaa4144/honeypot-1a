@@ -27,7 +27,7 @@ for index in {0..3}; do
 	port_num="${ports[$index]}"
 
 	# Obtain random minute count between 45-60 minutes
-	minutes=$((RANDOM % 3 + 2))
+	minutes=$((RANDOM % 16 + 45))
 
 	# Call recycling script on respective container
 	/home/student/honeypot-1a/recycling_scripts/recycling_script.sh "$minutes" "$ip_address" "$container" "$port_num"
