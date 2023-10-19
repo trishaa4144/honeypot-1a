@@ -10,9 +10,11 @@
 # names server1, server2, server3, server4, and IPs ip1, ip2, ip3, ip4
 # for the purpose of this implementation. However, when deploying our 
 # honeypots, we can easily modify these two lines with correct names. 
-containers=(“server1”, “server2”, “server3”, “server4”)
-ips=(“128.8.238.194”,“128.8.238.101”,“128.8.238.173”,“128.8.238.212”)
-ports=("1297", "5420", "3956", "2145")
+
+containers=("server1" "server2" "server3" "server4")
+ips=("128.8.238.194" "128.8.238.101" "128.8.238.173" "128.8.238.212")
+ports=("1297" "5420" "3956" "2145")
+
 
 # Iterate through container/ip indices and call recycling script on
 # each container-ip pair. Pass in a random value between 45 - 60 minutes.
