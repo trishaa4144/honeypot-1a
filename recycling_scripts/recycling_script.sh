@@ -68,7 +68,7 @@ if [[ -e time_$container_name ]]; then
 
     # Done this way because after the first instance is done, the container after that to be deleted will be shifted up to uid 0,
     # so on and so forth
-    sudo forever stop 0
+    sudo forever stop $(sudo forever list | grep -w $container_name | cut -d " " -f5 | sed 's/[][]//g')
 
     # Call the script on itself at the end here. This ensures that once a
     # container is deleted, it immediately starts up another one.
