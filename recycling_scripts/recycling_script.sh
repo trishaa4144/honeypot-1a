@@ -69,6 +69,10 @@ if [[ -e /home/student/hpotinfo/time_$container_name ]]; then
 
     # Done this way because after the first instance is done, the container after that to be deleted will be shifted up to uid 0,
     # so on and so forth
+    
+    # DELETE LATER
+    echo $(sudo forever list | grep -w $container_name | cut -d " " -f5 | sed 's/[][]//g')
+
     sudo forever stop $(sudo forever list | grep -w $container_name | cut -d " " -f5 | sed 's/[][]//g')
     
     # Deletes the container entirely as it is ready to be recycled
