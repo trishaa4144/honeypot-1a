@@ -44,8 +44,8 @@ if [[ -e time_$container_name ]]; then
       mkdir ~/malware_downloads/
     fi
 
-    if [[ ! -d ~/malware_downloads/"$honey_type" ]]; then
-      mkdir ~/malware_downloads/"$honey_type"
+    if [[ ! -d ~/malware_downloads/$(cat honey_$container_name) ]]; then
+      mkdir ~/malware_downloads/$(cat honey_$container_name)
     fi
 
     # Copies all files in the .downloads directory of the container onto the host's directory named [container_name]_downloads
