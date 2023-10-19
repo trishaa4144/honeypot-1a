@@ -45,11 +45,11 @@ def generate_fake_data(
     else:
         faker_obj = Faker()
 
-    create_folder_structure("generated/" + papers_dir)
+    create_folder_structure("~/generated/" + papers_dir)
 
     generate_contacts(
         faker_obj,
-        "generated/" + contacts_file + ".json",
+        "~/generated/" + contacts_file + ".json",
         num_contact_records,
         name_label,
         courses_label,
@@ -57,7 +57,7 @@ def generate_fake_data(
 
     # Generate fake papers and data
     for folder_num in range(1, num_paper_dirs):
-        papers_folder = os.path.join("generated/" + papers_dir, f"{folder_num}")
+        papers_folder = os.path.join("~/generated/" + papers_dir, f"{folder_num}")
         for paper_num in range(1, random.randint(2, 10)):
             pdf_file = os.path.join(papers_folder, f"{papers_dir}_{paper_num}.pdf")
             c = canvas.Canvas(pdf_file, pagesize=letter)

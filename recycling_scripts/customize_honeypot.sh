@@ -17,10 +17,10 @@ echo $language
 python3 /home/student/honeypot-1a/honeymaker.py --language $language
 
 # Add functionality to copy generated files/folders from "generated" folder to the container.
-sudo cp -r "/home/student/honeypot-1a/generated/"* /var/lib/lxc/$container_name/rootfs/root
+sudo cp -r "~/generated/"* /var/lib/lxc/$container_name/rootfs/root
 
 # Remove "generated" folder from container
-rm -rf generated
+rm -rf "~/generated/"
 
 sudo lxc-attach -n "$container_name" -- bash -c 'sudo apt-get update'
 case $language in
@@ -40,7 +40,7 @@ case $language in
   "chinese")
     sudo lxc-attach -n "$container_name" -- bash -c 'sudo apt-get install -y language-pack-zh-hans'
     sudo lxc-attach -n "$container_name" -- bash -c 'sudo apt-get update'
-    sudo lxc-attach -n "$container_name" -- bash -c 'sudo update-locale LANG=ru_RU.UTF-8 LANGUAGE=zh_CN.UTF-8'
+    sudo lxc-attach -n "$container_name" -- bash -c 'sudo update-locale LANG=zh_CN.UTF-8 LANGUAGE=zh_CN.UTF-8'
     ;;
   *)
     echo "Unsupported language. Use 'spanish' for Spanish, 'russian' for Russian, 'chinese' for Chinese, and 'english' for English."
