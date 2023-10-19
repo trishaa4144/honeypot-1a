@@ -11,6 +11,6 @@ for index in {0..3}; do
     # Grab its name from the array containers[]
     container="${containers[$index]}"
     # Run the monitoring script on the selected honeypot
-    ./monitoring.sh $container
+    /home/student/recycling_scripts/monitoring.sh $container
 done
 
