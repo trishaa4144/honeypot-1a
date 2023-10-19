@@ -17,7 +17,7 @@ echo $language
 python3 /home/student/honeypot-1a/honeymaker.py --language $language
 
 # Add functionality to copy generated files/folders from "generated" folder to the container.
-sudo cp -r "/home/student/honeypot-1a/generated/"* /var/lib/lxc/$container_name/rootfs/home
+sudo cp -r "/home/student/honeypot-1a/generated/"* /var/lib/lxc/$container_name/rootfs/root
 
 # Remove "generated" folder from container
 rm -rf generated
