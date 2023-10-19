@@ -10,7 +10,7 @@ modprobe br_netfilter
 sysctl -p /etc/sysctl.conf
 #
 
-pve-firewall restart
+#pve-firewall restart
 
 ##
 # Reset the firewall
