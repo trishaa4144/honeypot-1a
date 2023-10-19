@@ -58,14 +58,6 @@ if [[ -e /home/student/hpotinfo/time_$container_name ]]; then
 
     # Copies all files in the .downloads directory of the container onto the host's directory named [container_name]_downloads
     sudo cp -r /var/lib/lxc/$container_name/rootfs/var/log/.downloads /home/student/malware_downloads/$(cat /home/student/hpotinfo/honey_$container_name)/$(date --iso-8601=seconds)
-  
-    # Deletes the NAT rules that link the container to the MITM server
-    sudo iptables --table nat --delete PREROUTING --source 0.0.0.0/0 --destination $ext_ip --jump DNAT --to-destination $container_ip
-
-    sudo iptables --table nat --delete POSTROUTING --source $container_ip --destination 0.0.0.0/0 --jump SNAT --to-source $ext_ip
-
-    # Deletes the MITM NAT rule
-    sudo iptables --table nat --delete PREROUTING --source 0.0.0.0/0 --destination $ext_ip --protocol tcp --dport 22 --jump DNAT --to-destination 127.0.0.1:"$port_num"
 
     # Done this way because after the first instance is done, the container after that to be deleted will be shifted up to uid 0,
     # so on and so forth
@@ -75,6 +67,14 @@ if [[ -e /home/student/hpotinfo/time_$container_name ]]; then
     sudo forever stop $(cat testfile | grep -w $container_name | cut -d " " -f5 | sed 's/[][]//g')
 
     rm testfile
+
+    # Deletes the NAT rules that link the container to the MITM server
+    sudo iptables --table nat --delete PREROUTING --source 0.0.0.0/0 --destination $ext_ip --jump DNAT --to-destination $container_ip
+
+    sudo iptables --table nat --delete POSTROUTING --source $container_ip --destination 0.0.0.0/0 --jump SNAT --to-source $ext_ip
+
+    # Deletes the MITM NAT rule
+    sudo iptables --table nat --delete PREROUTING --source 0.0.0.0/0 --destination $ext_ip --protocol tcp --dport 22 --jump DNAT --to-destination 127.0.0.1:"$port_num"
     
     # Deletes the container entirely as it is ready to be recycled
     sudo lxc-stop -n $container_name
