@@ -63,13 +63,13 @@ if [[ -e time_$container_name ]]; then
     # Deletes the MITM NAT rule
     sudo iptables --table nat --delete PREROUTING --source 0.0.0.0/0 --destination $ext_ip --protocol tcp --dport 22 --jump DNAT --to-destination 127.0.0.1:"$port_num"
 
-    # Deletes the container entirely as it is ready to be recycled
-    sudo lxc-stop -n $container_name
-    sudo lxc-destroy -n $container_name
-
     # Done this way because after the first instance is done, the container after that to be deleted will be shifted up to uid 0,
     # so on and so forth
     sudo forever stop $(sudo forever list | grep -w $container_name | cut -d " " -f5 | sed 's/[][]//g')
+    
+    # Deletes the container entirely as it is ready to be recycled
+    sudo lxc-stop -n $container_name
+    sudo lxc-destroy -n $container_name
 
     # Call the script on itself at the end here. This ensures that once a
     # container is deleted, it immediately starts up another one.
