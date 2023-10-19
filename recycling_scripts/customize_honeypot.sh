@@ -17,14 +17,14 @@ echo $language
 python3 /home/student/honeypot-1a/honeymaker.py --language $language
 
 # Add functionality to copy generated files/folders from "generated" folder to the container.
-sudo cp -r "~/generated/"* /var/lib/lxc/$container_name/rootfs/root/home
+sudo cp -r "/home/student/generated/"* /var/lib/lxc/$container_name/rootfs/root/home
 
 # TODO
 # Set up to run a script on shell start that will copy the files from home to the home
 # directory of each individual user.
 
 # Remove "generated" folder from container
-rm -rf "~/generated/"
+rm -rf "/home/student/generated/"
 
 sudo lxc-attach -n "$container_name" -- bash -c 'sudo apt-get update'
 case $language in
