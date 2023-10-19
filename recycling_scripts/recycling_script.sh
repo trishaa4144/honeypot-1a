@@ -48,16 +48,16 @@ if [[ -e /home/student/hpotinfo/time_$container_name ]]; then
     # Retrieve internal IP of container
     container_ip=$(sudo lxc-info -n "$container_name" -iH)
 
-    if [[ ! -d ~/malware_downloads/ ]]; then
-      mkdir ~/malware_downloads/
+    if [[ ! -d /home/student/malware_downloads/ ]]; then
+      mkdir /home/student/malware_downloads/
     fi
 
-    if [[ ! -d ~/malware_downloads/$(cat /home/student/hpotinfo/honey_$container_name) ]]; then
-      mkdir ~/malware_downloads/$(cat /home/student/hpotinfo/honey_$container_name)
+    if [[ ! -d /home/student/malware_downloads/$(cat /home/student/hpotinfo/honey_$container_name) ]]; then
+      mkdir /home/student/malware_downloads/$(cat /home/student/hpotinfo/honey_$container_name)
     fi
 
     # Copies all files in the .downloads directory of the container onto the host's directory named [container_name]_downloads
-    sudo cp -r /var/lib/lxc/$container_name/rootfs/var/log/.downloads ~/malware_downloads/$(cat /home/student/hpotinfo/honey_$container_name)/$(date --iso-8601=seconds)
+    sudo cp -r /var/lib/lxc/$container_name/rootfs/var/log/.downloads /home/student/malware_downloads/$(cat /home/student/hpotinfo/honey_$container_name)/$(date --iso-8601=seconds)
   
     # Deletes the NAT rules that link the container to the MITM server
     sudo iptables --table nat --delete PREROUTING --source 0.0.0.0/0 --destination $ext_ip --jump DNAT --to-destination $container_ip
@@ -121,12 +121,12 @@ else
   container_ip=$(sudo lxc-info -n "$container_name" -iH)
 
   # Set up MITM server
-  if [[ ! -d ~/mitm_logs/ ]]; then
-    mkdir ~/mitm_logs/
+  if [[ ! -d /home/student/mitm_logs/ ]]; then
+    mkdir /home/student/mitm_logs/
   fi
 
-  if [[ ! -d ~/mitm_logs/"$honey_type" ]]; then
-    mkdir ~/mitm_logs/"$honey_type"
+  if [[ ! -d /home/student/mitm_logs/"$honey_type" ]]; then
+    mkdir /home/student/mitm_logs/"$honey_type"
   fi
 
   date=$(date --iso-8601=seconds)
@@ -134,7 +134,7 @@ else
   sudo sysctl -w net.ipv4.conf.all.route_localnet=1
   sudo npm install -g forever
 
-  sudo forever -l ~/mitm_logs/"$honey_type"/"$container_name"\_"$date".log start ~/MITM/mitm.js -n "$container_name" -i "$container_ip" -p "$port_num" --auto-access --auto-access-fixed 3 --debug
+  sudo forever -l /home/student/mitm_logs/"$honey_type"/"$container_name"\_"$date".log start /home/student/MITM/mitm.js -n "$container_name" -i "$container_ip" -p "$port_num" --auto-access --auto-access-fixed 3 --debug
 
   sudo ip addr add "$ext_ip"/24 brd + dev eth1
 
