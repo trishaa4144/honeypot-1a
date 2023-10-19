@@ -41,7 +41,7 @@ if [[ -e time_$container_name ]]; then
     container_ip=$(sudo lxc-info -n "$container_name" -iH)
 
     if [[ ! -d ~/malware_downloads/ ]]; then
-    mkdir ~/malware_downloads/
+      mkdir ~/malware_downloads/
     fi
 
     if [[ ! -d ~/malware_downloads/"$honey_type" ]]; then
