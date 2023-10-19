@@ -37,10 +37,14 @@ if [[ -e time_$container_name ]]; then
     echo "container $container_name not ready to be recycled"
     exit 0
   else
-    # Log container stopping time and remove ‘time’ file
-    echo "$container_name stopping at $(date --iso-8601=seconds)"
+    # Add 10 minutes to time file for duration of honeypot destruction/cleanup process
+    # This will prevent crontab from trying to recycle the honeypot twice concurrently.
     rm time_$container_name
-
+    curr_time=$(date +"%s")
+    seconds=$((10 * 60))
+    goal_time=$((curr_time + seconds))
+    echo "$container_name $goal_time" > time_$container_name
+    
     # Retrieve internal IP of container
     container_ip=$(sudo lxc-info -n "$container_name" -iH)
 
@@ -70,6 +74,10 @@ if [[ -e time_$container_name ]]; then
     # Deletes the container entirely as it is ready to be recycled
     sudo lxc-stop -n $container_name
     sudo lxc-destroy -n $container_name
+
+    # Log container stopping time and remove ‘time’ file
+    echo "$container_name stopped at $(date --iso-8601=seconds)"
+    rm time_$container_name
 
     # Call the script on itself at the end here. This ensures that once a
     # container is deleted, it immediately starts up another one.
