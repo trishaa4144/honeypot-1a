@@ -27,9 +27,9 @@ port_num=$4
 honey_type=$(shuf -n 1 -e english spanish russian chinese)
 
 # Checks if “time” file exists for the current container
-if [[ -e time_$container_name ]]; then
+if [[ -e /home/student/hpotinfo/time_$container_name ]]; then
   # Read values from time file
-  goal_time=$(cat time_$container_name | cut -d' ' -f2)
+  goal_time=$(cat /home/student/hpotinfo/time_$container_name | cut -d' ' -f2)
   curr_time=$(date +"%s")
 
   # Check if it’s time to recycle the container
@@ -39,11 +39,11 @@ if [[ -e time_$container_name ]]; then
   else
     # Add 10 minutes to time file for duration of honeypot destruction/cleanup process
     # This will prevent crontab from trying to recycle the honeypot twice concurrently.
-    rm time_$container_name
+    rm /home/student/hpotinfo/time_$container_name
     curr_time=$(date +"%s")
     seconds=$((10 * 60))
     goal_time=$((curr_time + seconds))
-    echo "$container_name $goal_time" > time_$container_name
+    echo "$container_name $goal_time" > /home/student/hpotinfo/time_$container_name
     
     # Retrieve internal IP of container
     container_ip=$(sudo lxc-info -n "$container_name" -iH)
@@ -52,12 +52,12 @@ if [[ -e time_$container_name ]]; then
       mkdir ~/malware_downloads/
     fi
 
-    if [[ ! -d ~/malware_downloads/$(cat honey_$container_name) ]]; then
-      mkdir ~/malware_downloads/$(cat honey_$container_name)
+    if [[ ! -d ~/malware_downloads/$(cat /home/student/hpotinfo/honey_$container_name) ]]; then
+      mkdir ~/malware_downloads/$(cat /home/student/hpotinfo/honey_$container_name)
     fi
 
     # Copies all files in the .downloads directory of the container onto the host's directory named [container_name]_downloads
-    sudo cp -r /var/lib/lxc/$container_name/rootfs/var/log/.downloads ~/malware_downloads/$(cat honey_$container_name)/$(date --iso-8601=seconds)
+    sudo cp -r /var/lib/lxc/$container_name/rootfs/var/log/.downloads ~/malware_downloads/$(cat /home/student/hpotinfo/honey_$container_name)/$(date --iso-8601=seconds)
   
     # Deletes the NAT rules that link the container to the MITM server
     sudo iptables --table nat --delete PREROUTING --source 0.0.0.0/0 --destination $ext_ip --jump DNAT --to-destination $container_ip
@@ -77,7 +77,7 @@ if [[ -e time_$container_name ]]; then
 
     # Log container stopping time and remove ‘time’ file
     echo "$container_name stopped at $(date --iso-8601=seconds)"
-    rm time_$container_name
+    rm /home/student/hpotinfo/time_$container_name
 
     # Call the script on itself at the end here. This ensures that once a
     # container is deleted, it immediately starts up another one.
@@ -114,9 +114,9 @@ else
   goal_time=$((curr_time + seconds))
 
   # Create ‘time’ file with container name and goal time
-  echo "$container_name $goal_time" > time_$container_name
+  echo "$container_name $goal_time" > /home/student/hpotinfo/time_$container_name
 
-  echo $honey_type > honey_$container_name
+  echo $honey_type > /home/student/hpotinfo/honey_$container_name
 
   container_ip=$(sudo lxc-info -n "$container_name" -iH)
 
