@@ -55,6 +55,6 @@ esac
 
 # Install the openssh-server package in the container
 sudo lxc-attach -n "$container_name" -- bash -c 'sudo apt-get install -y openssh-server'
-sleep 5
+sleep 10
 sudo lxc-attach -n "$container_name" -- bash -c 'sudo systemctl start ssh'
 sleep 5
