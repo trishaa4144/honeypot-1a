@@ -20,18 +20,12 @@ if [ ! -d "/home/student/generated/" ]; then
     python3 /home/student/honeypot-1a/honeymaker.py --language $language
 fi
 
-# Just for test
-users=("guest" "user" "test" "my_account")
-
-for ((i = 0; i < 4; i++)); do
-    user=$(user[$i])
-    sudo lxc-attach -n $container_name -- bash -c "sudo adduser $user"
-    sudo lxc-attach -n $container_name -- bash -c "echo $user:password | sudo chpasswd"
-    sudo cp -r "/home/student/generated/$language/"* /var/lib/lxc/$container_name/roofs/home/$user
-done
+# Created a my_Account user in order to simulate the grad student's personal home directory
+sudo lxc-attach -n "$container_name" -- bash -c 'sudo useradd -m my_Account'
+sudo lxc-attach -n "$container_name" -- bash -c 'echo my_Account:password | sudo chpasswd'
 
 # Add functionality to copy generated files/folders from "generated" folder to the container.
-#sudo cp -r "/home/student/generated/$language/"* /var/lib/lxc/$container_name/rootfs/home
+sudo cp -r "/home/student/generated/$language/"* /var/lib/lxc/$container_name/rootfs/home/my_Account
 
 # TODO
 # Set up to run a script on shell start that will copy the files from home to the home
