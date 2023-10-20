@@ -105,6 +105,13 @@ else
   # Start a container with the ip address ($2), container name ($3)
   echo "$(date --iso-8601=seconds): Recreating $container_name." >> /home/student/check_logs/recycling_debug.log
 
+  curr_time=$(date +"%s")
+  seconds=$(($1 * 60))
+  goal_time=$((curr_time + seconds))
+
+  # Create ‘time’ file with container name and goal time
+  echo "$container_name $goal_time" > /home/student/hpotinfo/time_$container_name
+
   sudo lxc-create -n $container_name -t download -- -d ubuntu -r focal -a amd64
 
   sudo lxc-start -n $container_name
@@ -120,13 +127,6 @@ else
   # machine, and update the local language on the machine
 
   /home/student/honeypot-1a/recycling_scripts/customize_honeypot.sh $container_name $honey_type
-
-  curr_time=$(date +"%s")
-  seconds=$(($1 * 60))
-  goal_time=$((curr_time + seconds))
-
-  # Create ‘time’ file with container name and goal time
-  echo "$container_name $goal_time" > /home/student/hpotinfo/time_$container_name
 
   echo $honey_type > /home/student/hpotinfo/honey_$container_name
 
