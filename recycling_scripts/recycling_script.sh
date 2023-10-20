@@ -33,7 +33,7 @@ if [[ -e /home/student/hpotinfo/time_$container_name ]]; then
   curr_time=$(date +"%s")
 
   # Check if it’s time to recycle the container
-  if [ $curr_time -lt $goal_time ]; then
+  if [ $curr_time -lt $goal_time || ! -e /home/student/hpotinfo/recycle_$container_name ]; then
     echo "container $container_name not ready to be recycled"
     exit 0
   else
@@ -80,6 +80,7 @@ if [[ -e /home/student/hpotinfo/time_$container_name ]]; then
     echo "$container_name stopped at $(date --iso-8601=seconds)"
     rm /home/student/hpotinfo/time_$container_name
     rm /home/student/hpotinfo/honey_$container_name
+    rm /home/student/hpotinfo/recycle_$container_name
 
     sleep 5
 
@@ -117,6 +118,8 @@ else
   echo "$container_name $goal_time" > /home/student/hpotinfo/time_$container_name
 
   echo $honey_type > /home/student/hpotinfo/honey_$container_name
+
+  touch /home/student/hpotinfo/recycle_$container_name
 
   container_ip=$(sudo lxc-info -n "$container_name" -iH)
 
