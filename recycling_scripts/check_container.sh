@@ -34,7 +34,7 @@ for index in {0..3}; do
 
 	# Call recycling script on respective container
 	/home/student/honeypot-1a/recycling_scripts/recycling_script.sh "$minutes" "$ip_address" "$container" "$port_num"
-	sleep 30
+	sleep 10
 done
 
 
