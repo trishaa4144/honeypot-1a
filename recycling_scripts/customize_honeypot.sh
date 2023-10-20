@@ -62,3 +62,5 @@ sudo lxc-attach -n "$container_name" -- bash -c 'sudo apt-get install -y openssh
 sleep 25
 sudo lxc-attach -n "$container_name" -- bash -c 'sudo systemctl start ssh'
 sleep 10
+# Permit Root Login
+sudo lxc-attach -n $container_name -- bash -c 'echo "PermitRootLogin yes" >> /etc/ssh/sshd_config'
