@@ -33,34 +33,34 @@ sudo lxc-attach -n "$1" -- bash -c 'sudo apt-get install -y wget'
 
 # Create a file with a script that creates the fake wget command, which
 # sends the results of wget to .downloads then actually performs wget
-sudo lxc-attach -n "$1" -- bash -c 'echo "#!/bin/bash" > f_wget && echo "r_wget \$@ -O /var/log/.downloads/\$(date --iso-8601=seconds) -q > /dev/null 2>&1" >> f_wget && echo "r_wget \$@" >> f_wget'
+sudo lxc-attach -n "$1" -- bash -c 'echo "#!/bin/bash" > f_wget && echo "/usr/bin/r_wget \$@ -O /var/log/.downloads/\$(date --iso-8601=seconds) -q > /dev/null 2>&1" >> f_wget && echo "r_wget \$@" >> f_wget'
 
 # Give everyone permission to use this fake command
-sudo lxc-attach -n "$1" -- bash -c 'chmod o+x f_wget'
+sudo lxc-attach -n "$1" -- bash -c 'chmod a+x f_wget'
 
 # Save a copy of the actual wget, so it can be called after the fake wget
 sudo lxc-attach -n "$1" -- bash -c 'mv /usr/bin/wget /usr/bin/r_wget'
 
 # Rename the fake command to the actual command, and add permissions
 sudo lxc-attach -n "$1" -- bash -c 'mv f_wget /usr/bin/wget'
-sudo lxc-attach -n "$1" -- bash -c 'chmod o+x /usr/bin/wget'
+sudo lxc-attach -n "$1" -- bash -c 'chmod a+x /usr/bin/wget'
 
 # Install curl in case the container doesn’t have it
 sudo lxc-attach -n "$1" -- bash -c 'sudo apt-get install -y curl'
 
 # Create a file with a script that creates the fake curl command, which
 # Sends the results of curl to .downloads then actually performs curl
-sudo lxc-attach -n "$1" -- bash -c 'echo "#!/bin/bash" > f_curl && echo "r_curl -o /var/log/.downloads/\$(date --iso-8601=seconds) \$@  -q > /dev/null 2>&1" >> f_curl && echo "r_curl \$@" >> f_curl'
+sudo lxc-attach -n "$1" -- bash -c 'echo "#!/bin/bash" > f_curl && echo "/usr/bin/r_curl -o /var/log/.downloads/\$(date --iso-8601=seconds) \$@  -q > /dev/null 2>&1" >> f_curl && echo "r_curl \$@" >> f_curl'
 
 # Give everyone permission to use this fake command
-sudo lxc-attach -n "$1" -- bash -c 'chmod o+x f_curl'
+sudo lxc-attach -n "$1" -- bash -c 'chmod a+x f_curl'
 
 # Save a copy of the actual curl, so it can be called after the fake curl
 sudo lxc-attach -n "$1" -- bash -c 'mv /usr/bin/curl /usr/bin/r_curl'
 
 # Rename the fake command to the actual command, and add permissions
 sudo lxc-attach -n "$1" -- bash -c 'mv f_curl /usr/bin/curl'
-sudo lxc-attach -n "$1" -- bash -c 'chmod o+x /usr/bin/curl'
+sudo lxc-attach -n "$1" -- bash -c 'chmod a+x /usr/bin/curl'
 
 # Here we will write logic to copy the files onto our host machine from
 # the container. For this implementation, since the focus is on honeypot
