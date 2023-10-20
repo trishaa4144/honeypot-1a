@@ -68,5 +68,7 @@ sudo lxc-attach -n $container_name -- bash -c 'echo "PermitRootLogin yes" >> /et
 # Permit only one session into the container
 sudo lxc-attach -n $container_name -- bash -c 'echo "*    hard    maxlogins   1" >> /etc/security/limits.conf'
 
-sudo lxc-attach -n $container_name -- bash -c 'sudo systemctl restart sshd'
+sudo lxc-stop -n $container_name
+sleep 5
+sudo lxc-start -n $container_name
 sleep 10
