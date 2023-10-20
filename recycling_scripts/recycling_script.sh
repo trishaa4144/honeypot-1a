@@ -94,7 +94,7 @@ if [[ -e /home/student/hpotinfo/time_$container_name ]]; then
 else
   # Start a container with the ip address ($2), container name ($3)
 
-  echo "Creating $container_name at $(date +"%s")" >> /home/student/creating_$container_name.log
+  echo "Creating $container_name at $(date --iso-8601=seconds)" >> /home/student/creating_$container_name.log
 
   sudo lxc-create -n $container_name -t download -- -d ubuntu -r focal -a amd64
 
