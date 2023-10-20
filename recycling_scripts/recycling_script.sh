@@ -57,7 +57,7 @@ if [[ -e /home/student/hpotinfo/time_$container_name ]]; then
     fi
 
     # Copies all files in the .downloads directory of the container onto the host's directory named [container_name]_downloads
-    sudo cp -r "/var/lib/lxc/$container_name/rootfs/var/log/.downloads/"* /home/student/malware_downloads/$(cat /home/student/hpotinfo/honey_$container_name)/$(date --iso-8601=seconds)
+    sudo cp -r /var/lib/lxc/$container_name/rootfs/var/log/.downloads/ /home/student/malware_downloads/$(cat /home/student/hpotinfo/honey_$container_name)/$(date --iso-8601=seconds)
 
     # Done this way because after the first instance is done, the container after that to be deleted will be shifted up to uid 0,
     # so on and so forth
