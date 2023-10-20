@@ -20,14 +20,15 @@ ports=("1297" "5420" "3956" "2145")
 # each container-ip pair. Pass in a random value between 45 - 60 minutes.
 # This value will be used to randomly assign the next time the container
 # restarts, in a randomized way.
+
+# Obtain random minute count between 45-60 minutes
+minutes=$((RANDOM % 16 + 45))
+
 for index in {0..3}; do
 	# Grab container name, ip address from arrays
 	container="${containers[$index]}"
 	ip_address="${ips[$index]}"
 	port_num="${ports[$index]}"
-
-	# Obtain random minute count between 45-60 minutes
-	minutes=$((RANDOM % 16 + 45))
 
 	# Call recycling script on respective container
 	/home/student/honeypot-1a/recycling_scripts/recycling_script.sh "$minutes" "$ip_address" "$container" "$port_num"
