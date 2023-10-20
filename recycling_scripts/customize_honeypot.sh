@@ -60,8 +60,10 @@ esac
 # Install the openssh-server package in the container
 sudo lxc-attach -n "$container_name" -- bash -c 'sudo apt-get install -y openssh-server'
 sleep 25
-# Permit Root Login
-sudo lxc-attach -n $container_name -- bash -c 'echo "PermitRootLogin yes" >> /etc/ssh/sshd_config'
 # Start the ssh server
 sudo lxc-attach -n "$container_name" -- bash -c 'sudo systemctl start sshd'
+sleep 10
+# Permit Root Login
+sudo lxc-attach -n $container_name -- bash -c 'echo "PermitRootLogin yes" >> /etc/ssh/sshd_config'
+sudo lxc-attach -n $container_name -- bash -c 'sudo systemctl restart sshd'
 sleep 10
