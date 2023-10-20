@@ -33,10 +33,11 @@ if [[ -e /home/student/hpotinfo/time_$container_name ]]; then
   curr_time=$(date +"%s")
 
   # Check if it’s time to recycle the container
-  if [ $curr_time -lt $goal_time || ! -e /home/student/hpotinfo/recycle_$container_name ]; then
+  if [ $curr_time -lt $goal_time ]; then
     echo "container $container_name not ready to be recycled"
     exit 0
   else
+
     # Add 10 minutes to time file for duration of honeypot destruction/cleanup process
     # This will prevent crontab from trying to recycle the honeypot twice concurrently.
     rm /home/student/hpotinfo/time_$container_name
@@ -80,7 +81,6 @@ if [[ -e /home/student/hpotinfo/time_$container_name ]]; then
     echo "$container_name stopped at $(date --iso-8601=seconds)"
     rm /home/student/hpotinfo/time_$container_name
     rm /home/student/hpotinfo/honey_$container_name
-    rm /home/student/hpotinfo/recycle_$container_name
 
     sleep 5
 
@@ -93,6 +93,8 @@ if [[ -e /home/student/hpotinfo/time_$container_name ]]; then
 
 else
   # Start a container with the ip address ($2), container name ($3)
+
+  echo "Creating $container_name at $(date +"%s")" >> /home/student/creating_$container_name.log
 
   sudo lxc-create -n $container_name -t download -- -d ubuntu -r focal -a amd64
 
@@ -118,8 +120,6 @@ else
   echo "$container_name $goal_time" > /home/student/hpotinfo/time_$container_name
 
   echo $honey_type > /home/student/hpotinfo/honey_$container_name
-
-  touch /home/student/hpotinfo/recycle_$container_name
 
   container_ip=$(sudo lxc-info -n "$container_name" -iH)
 
