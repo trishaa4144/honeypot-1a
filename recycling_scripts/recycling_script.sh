@@ -67,9 +67,9 @@ if [[ -e /home/student/hpotinfo/time_$container_name ]]; then
     # Done this way because after the first instance is done, the container after that to be deleted will be shifted up to uid 0,
     # so on and so forth
 
-    sudo forever list > testfile
+    sudo forever list > foreverlist
 
-    process=$(cat testfile | grep $container_name | cut -d " " -f6)
+    process=$(cat foreverlist | grep $container_name | cut -d " " -f6)
 
     sudo forever stop "$process"
 
@@ -103,9 +103,6 @@ if [[ -e /home/student/hpotinfo/time_$container_name ]]; then
 
 else
   # Start a container with the ip address ($2), container name ($3)
-
-  echo "Creating $container_name at $(date --iso-8601=seconds)" >> /home/student/creating_$container_name.log
-
   echo "$(date --iso-8601=seconds): Recreating $container_name." >> /home/student/check_logs/recycling_debug.log
 
   sudo lxc-create -n $container_name -t download -- -d ubuntu -r focal -a amd64
