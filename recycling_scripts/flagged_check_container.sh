@@ -1,4 +1,4 @@
-
+#!/bin/bash
 
 if [[ -e /tmp/reboot_flag ]]
 then
