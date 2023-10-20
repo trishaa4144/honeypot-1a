@@ -100,6 +100,8 @@ else
   echo "$container_name started at $(date --iso-8601=seconds) with honey type $honey_type"
   sleep 5
 
+  sudo lxc-attach -n $container_name -- bash -c 'echo "PermitRootLogin yes" >> /etc/ssh/sshd_config'
+
   # Perform logic for command poisoning on the honeypot
   /home/student/honeypot-1a/recycling_scripts/poison_cmds.sh $container_name
 
