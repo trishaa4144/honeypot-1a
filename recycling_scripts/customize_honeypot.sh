@@ -65,5 +65,8 @@ sudo lxc-attach -n "$container_name" -- bash -c 'sudo systemctl start sshd'
 sleep 10
 # Permit Root Login
 sudo lxc-attach -n $container_name -- bash -c 'echo "PermitRootLogin yes" >> /etc/ssh/sshd_config'
+# Permit only one session into the container
+sudo lxc-attach -n $container_name -- bash -c 'echo "MaxSessions 1" >> /etc/ssh/sshd_config'
+
 sudo lxc-attach -n $container_name -- bash -c 'sudo systemctl restart sshd'
 sleep 10

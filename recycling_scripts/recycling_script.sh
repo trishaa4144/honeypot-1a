@@ -40,7 +40,7 @@ if [[ -e /home/student/hpotinfo/time_$container_name ]]; then
 
     # Add 10 minutes to time file for duration of honeypot destruction/cleanup process
     # This will prevent crontab from trying to recycle the honeypot twice concurrently.
-    rm /home/student/hpotinfo/time_$container_name
+    sudo rm -f /home/student/hpotinfo/time_$container_name
     curr_time=$(date +"%s")
     seconds=$((10 * 60))
     goal_time=$((curr_time + seconds))
@@ -83,8 +83,8 @@ if [[ -e /home/student/hpotinfo/time_$container_name ]]; then
 
     # Log container stopping time and remove ‘time’ file
     echo "$container_name stopped at $(date --iso-8601=seconds)"
-    rm /home/student/hpotinfo/time_$container_name
-    rm /home/student/hpotinfo/honey_$container_name
+    # sudo rm -f /home/student/hpotinfo/time_$container_name
+    sudo rm -f /home/student/hpotinfo/honey_$container_name
 
     sleep 5
 
