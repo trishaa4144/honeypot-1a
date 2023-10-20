@@ -26,23 +26,23 @@ port_num=$4
 
 honey_type=$(shuf -n 1 -e english spanish russian chinese)
 
-echo "$(date --iso-8601=seconds): Call recycle script for $container_name, restarting for $num_min, with ip $ext_ip, port $port_num" >> /home/student/check_logs//home/student/check_logs/recycling_debug.log
+echo "$(date --iso-8601=seconds): Call recycle script for $container_name, restarting for $num_min, with ip $ext_ip, port $port_num" >> /home/student/check_logs/recycling_debug.log
 
 
 # Checks if “time” file exists for the current container
 if [[ -e /home/student/hpotinfo/time_$container_name ]]; then
-  echo "$(date --iso-8601=seconds): Time file found for $container_name." >> /home/student/check_logs//home/student/check_logs/recycling_debug.log
+  echo "$(date --iso-8601=seconds): Time file found for $container_name." >> /home/student/check_logs/recycling_debug.log
   # Read values from time file
   goal_time=$(cat /home/student/hpotinfo/time_$container_name | cut -d' ' -f2)
   curr_time=$(date +"%s")
 
   # Check if it’s time to recycle the container
   if [ $curr_time -lt $goal_time ]; then
-    echo "$(date --iso-8601=seconds): Not time to recycle $container_name." >> /home/student/check_logs//home/student/check_logs/recycling_debug.log
+    echo "$(date --iso-8601=seconds): Not time to recycle $container_name." >> /home/student/check_logs/recycling_debug.log
     echo "container $container_name not ready to be recycled"
     exit 0
   else
-    echo "$(date --iso-8601=seconds): Time has come to recycle $container_name. Adding 10 minutes to timefile." >> /home/student/check_logs//home/student/check_logs/recycling_debug.log
+    echo "$(date --iso-8601=seconds): Time has come to recycle $container_name. Adding 10 minutes to timefile." >> /home/student/check_logs/recycling_debug.log
     # Add 10 minutes to time file for duration of honeypot destruction/cleanup process
     # This will prevent crontab from trying to recycle the honeypot twice concurrently.
     curr_time=$(date +"%s")
@@ -92,7 +92,7 @@ if [[ -e /home/student/hpotinfo/time_$container_name ]]; then
 
     sleep 5
 
-    echo "$(date --iso-8601=seconds): Finishing destroying & deleting processes for $container_name." >> /home/student/check_logs//home/student/check_logs/recycling_debug.log
+    echo "$(date --iso-8601=seconds): Finishing destroying & deleting processes for $container_name." >> /home/student/check_logs/recycling_debug.log
 
     # Call the script on itself at the end here. This ensures that once a
     # container is deleted, it immediately starts up another one.
@@ -106,7 +106,7 @@ else
 
   echo "Creating $container_name at $(date --iso-8601=seconds)" >> /home/student/creating_$container_name.log
 
-  echo "$(date --iso-8601=seconds): Recreating $container_name." >> /home/student/check_logs//home/student/check_logs/recycling_debug.log
+  echo "$(date --iso-8601=seconds): Recreating $container_name." >> /home/student/check_logs/recycling_debug.log
 
   sudo lxc-create -n $container_name -t download -- -d ubuntu -r focal -a amd64
 
@@ -162,7 +162,7 @@ else
   sudo iptables --table nat --insert PREROUTING --source 0.0.0.0/0 --destination "$ext_ip" --protocol tcp --dport 22 --jump DNAT --to-destination 127.0.0.1:"$port_num"
 
 
-  echo "$(date --iso-8601=seconds): Finished creating $container_name." >> /home/student/check_logs//home/student/check_logs/recycling_debug.log
+  echo "$(date --iso-8601=seconds): Finished creating $container_name." >> /home/student/check_logs/recycling_debug.log
   exit 0
 fi
 
