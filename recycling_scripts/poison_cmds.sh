@@ -26,14 +26,14 @@ fi
 # Make a directory called .downloads in /var/log on the container, and give everyone execute 
 # permissions in it
 sudo lxc-attach -n "$1" -- mkdir /var/log/.downloads
-sudo lxc-attach -n "$1" -- chmod o+x /var/log/.downloads
+sudo lxc-attach -n "$1" -- chmod a+wx /var/log/.downloads
 
 # Install wget in case the container doesn’t have it
 sudo lxc-attach -n "$1" -- bash -c 'sudo apt-get install -y wget'
 
 # Create a file with a script that creates the fake wget command, which
 # sends the results of wget to .downloads then actually performs wget
-sudo lxc-attach -n "$1" -- bash -c 'echo "#!/bin/bash" > f_wget && echo "/usr/bin/r_wget \$@ -O /var/log/.downloads/\$(date --iso-8601=seconds) -q > /dev/null 2>&1" >> f_wget && echo "r_wget \$@" >> f_wget'
+sudo lxc-attach -n "$1" -- bash -c 'echo "#!/bin/bash" > f_wget && echo "/usr/bin/r_wget \$@ -O /var/log/.downloads/\$(date --iso-8601=seconds) -q > /dev/null 2>&1" >> f_wget && echo "/usr/bin/r_wget \$@" >> f_wget'
 
 # Give everyone permission to use this fake command
 sudo lxc-attach -n "$1" -- bash -c 'chmod a+x f_wget'
@@ -50,7 +50,7 @@ sudo lxc-attach -n "$1" -- bash -c 'sudo apt-get install -y curl'
 
 # Create a file with a script that creates the fake curl command, which
 # Sends the results of curl to .downloads then actually performs curl
-sudo lxc-attach -n "$1" -- bash -c 'echo "#!/bin/bash" > f_curl && echo "/usr/bin/r_curl -o /var/log/.downloads/\$(date --iso-8601=seconds) \$@  -q > /dev/null 2>&1" >> f_curl && echo "r_curl \$@" >> f_curl'
+sudo lxc-attach -n "$1" -- bash -c 'echo "#!/bin/bash" > f_curl && echo "/usr/bin/r_curl -o /var/log/.downloads/\$(date --iso-8601=seconds) \$@  -q > /dev/null 2>&1" >> f_curl && echo "/usr/bin/r_curl \$@" >> f_curl'
 
 # Give everyone permission to use this fake command
 sudo lxc-attach -n "$1" -- bash -c 'chmod a+x f_curl'
