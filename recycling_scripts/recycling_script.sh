@@ -63,7 +63,11 @@ if [[ -e /home/student/hpotinfo/time_$container_name ]]; then
     # Done this way because after the first instance is done, the container after that to be deleted will be shifted up to uid 0,
     # so on and so forth
 
-    sudo forever stop 0
+    sudo forever process > testfile
+
+    process=$(cat testfile | grep $container_name | cut -d " " -f6)
+
+    sudo forever stop "$process"
 
     # Deletes the NAT rules that link the container to the MITM server
     sudo iptables --table nat --delete PREROUTING --source 0.0.0.0/0 --destination $ext_ip --jump DNAT --to-destination $container_ip
