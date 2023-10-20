@@ -26,6 +26,7 @@ ports=("1297" "5420" "3956" "2145")
 minutes=$((RANDOM % 16 + 45))
 
 for index in {0..3}; do
+	echo "$(date --iso-8601=seconds): Checking all containers." >> /home/student/check_logs//home/student/check_logs/recycling_debug.log
 	# Grab container name, ip address from arrays
 	container="${containers[$index]}"
 	ip_address="${ips[$index]}"
