@@ -37,6 +37,7 @@ if [[ -e /home/student/hpotinfo/time_$container_name ]]; then
     echo "container $container_name not ready to be recycled"
     exit 0
   else
+
     # Add 10 minutes to time file for duration of honeypot destruction/cleanup process
     # This will prevent crontab from trying to recycle the honeypot twice concurrently.
     rm /home/student/hpotinfo/time_$container_name
@@ -62,7 +63,11 @@ if [[ -e /home/student/hpotinfo/time_$container_name ]]; then
     # Done this way because after the first instance is done, the container after that to be deleted will be shifted up to uid 0,
     # so on and so forth
 
-    sudo forever stop 0
+    sudo forever process > testfile
+
+    process=$(cat testfile | grep $container_name | cut -d " " -f6)
+
+    sudo forever stop "$process"
 
     # Deletes the NAT rules that link the container to the MITM server
     sudo iptables --table nat --delete PREROUTING --source 0.0.0.0/0 --destination $ext_ip --jump DNAT --to-destination $container_ip
@@ -92,6 +97,8 @@ if [[ -e /home/student/hpotinfo/time_$container_name ]]; then
 
 else
   # Start a container with the ip address ($2), container name ($3)
+
+  echo "Creating $container_name at $(date --iso-8601=seconds)" >> /home/student/creating_$container_name.log
 
   sudo lxc-create -n $container_name -t download -- -d ubuntu -r focal -a amd64
 
