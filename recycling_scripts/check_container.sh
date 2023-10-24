@@ -23,7 +23,7 @@ ports=("1297" "5420" "3956" "2145")
 # restarts, in a randomized way.
 
 # Obtain random minute count between 45-60 minutes
-minutes=$((RANDOM % 16 + 45))
+minutes=$((RANDOM % 10 + 25))
 
 for index in {0..3}; do
 	echo "$(date --iso-8601=seconds): Checking all containers." >> /home/student/check_logs/recycling_debug.log
