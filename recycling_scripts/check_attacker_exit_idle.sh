@@ -14,7 +14,7 @@
 # recycle the container (update the time file to right now)
 
 # Checks for command line arguments (container name)
-if [[ $# -ne 4 ]]; then
+if [[ $# -ne 1 ]]; then
   echo "Provide the name of the container."
   exit 1
 fi
