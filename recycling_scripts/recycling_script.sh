@@ -13,9 +13,9 @@
 # be recycled.
 
 
-# Checks that 3 command line arguments (number of minutes, IP address, and container name)
+# Checks for 4 command line arguments (number of minutes, IP address, container name, port number)
 if [[ $# -ne 4 ]]; then
-  echo "Provide three shell arguments for the number of minutes to run the  container, the public IP address, the assigned container name, and the port number of the MITM server."
+  echo "Provide three shell arguments for the number of minutes to run the container, the public IP address, the assigned container name, and the port number of the MITM server."
   exit 1
 fi
 
@@ -49,7 +49,7 @@ if [[ -e /home/student/hpotinfo/time_$container_name ]]; then
     seconds=$((10 * 60))
     goal_time=$((curr_time + seconds))
     echo "$container_name $goal_time" > /home/student/hpotinfo/time_$container_name
-    
+
     # Retrieve internal IP of container
     container_ip=$(sudo lxc-info -n "$container_name" -iH)
 
@@ -146,7 +146,9 @@ else
   sudo sysctl -w net.ipv4.conf.all.route_localnet=1
   sudo npm install -g forever
 
-  sudo forever -l /home/student/mitm_logs/"$honey_type"/"$container_name"\_"$date".log start /home/student/MITM/mitm.js -n "$container_name" -i "$container_ip" -p "$port_num" --auto-access --auto-access-fixed 1 --debug
+  mitm_location="/home/student/mitm_logs/$honey_type/$container_name"_"$date.log"
+  sudo forever -l "$mitm_location" start /home/student/MITM/mitm.js -n "$container_name" -i "$container_ip" -p "$port_num" --auto-access --auto-access-fixed 1 --debug
+  echo $mitm_location > /home/student/hpotinfo/mitm_location_$container_name
 
   sudo ip addr add "$ext_ip"/24 brd + dev eth1
 

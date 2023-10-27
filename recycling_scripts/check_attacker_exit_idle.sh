@@ -12,3 +12,29 @@
 
 # Alternatively, just check when the MITM log was last modified and if it was not that long ago,
 # recycle the container (update the time file to right now)
+
+# Checks for command line arguments (container name)
+if [[ $# -ne 4 ]]; then
+  echo "Provide the name of the container."
+  exit 1
+fi
+
+$container_name=$1
+
+if [[ -e /home/student/hpotinfo/mitm_location_$container_name ]]; then
+    mitm_location=$(cat /home/student/hpotinfo/mitm_location_$container_name)
+
+    # If auto access has been disabled at some point in the file, update the time file to
+    # be the current time + 2 minutes (since this is checked every 2 minutes, effectively
+    # kick out any attackers after 2-4 minutes, but provide enough grace period for
+    # them to perform an attack.)
+    if grep -q "Auto-access is now disabled" "$mitm_location"; then
+        rm -f /home/student/hpotinfo/time_$container_name
+        curr_time=$(date +"%s")
+        seconds=$((2 * 60))
+        goal_time=$((curr_time + seconds))
+        echo "$container_name $goal_time" > /home/student/hpotinfo/time_$container_name
+
+fi
+else
+    echo "There is no mitm log associated with a container named $1"

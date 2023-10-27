@@ -32,6 +32,9 @@ for index in {0..3}; do
 	ip_address="${ips[$index]}"
 	port_num="${ports[$index]}"
 
+	# Check MITM logs for idle time and update time files if necessary
+	/home/student/honeypot-1a/recycling_scripts/check_attacker_exit_idle.sh "$container"
+
 	# Call recycling script on respective container
 	/home/student/honeypot-1a/recycling_scripts/recycling_script.sh "$minutes" "$ip_address" "$container" "$port_num"
 	sleep 10
