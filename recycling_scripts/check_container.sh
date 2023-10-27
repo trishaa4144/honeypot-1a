@@ -22,8 +22,8 @@ ports=("1297" "5420" "3956" "2145")
 # This value will be used to randomly assign the next time the container
 # restarts, in a randomized way.
 
-# Obtain random minute count between 45-60 minutes
-minutes=$((RANDOM % 10 + 25))
+# Obtain random minute count between 25-30 minutes
+minutes=$((RANDOM % 5 + 25))
 
 for index in {0..3}; do
 	echo "$(date --iso-8601=seconds): Checking all containers." >> /home/student/check_logs/recycling_debug.log
