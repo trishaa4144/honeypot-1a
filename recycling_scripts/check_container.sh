@@ -33,7 +33,6 @@ for index in {0..3}; do
 	port_num="${ports[$index]}"
 
 	# Check MITM logs for idle time and update time files if necessary
-	echo "$(date --iso-8601=seconds): The container name is $container" >> /home/student/check_logs/recycling_debug.log
 	/home/student/honeypot-1a/recycling_scripts/check_attacker_exit_idle.sh "$container"
 
 	# Call recycling script on respective container
