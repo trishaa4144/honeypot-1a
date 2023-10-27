@@ -89,6 +89,7 @@ if [[ -e /home/student/hpotinfo/time_$container_name ]]; then
     echo "$container_name stopped at $(date --iso-8601=seconds)"
     rm -f /home/student/hpotinfo/honey_$container_name
     rm -f /home/student/hpotinfo/time_$container_name
+    rm -f /home/student/hpotinfo/mitm_location_$container_name
 
     sleep 5
 

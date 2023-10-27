@@ -29,12 +29,15 @@ if [[ -e /home/student/hpotinfo/mitm_location_$container_name ]]; then
     # kick out any attackers after 2-4 minutes, but provide enough grace period for
     # them to perform an attack.)
     if grep -q "Auto-access is now disabled" "$mitm_location"; then
-        rm -f /home/student/hpotinfo/time_$container_name
+        echo "$(date --iso-8601=seconds): Auto-access was disabled on $container_name, updating its recycle time." >> /home/student/check_logs/recycling_debug.log
         curr_time=$(date +"%s")
         seconds=$((2 * 60))
         goal_time=$((curr_time + seconds))
         echo "$container_name $goal_time" > /home/student/hpotinfo/time_$container_name
+    fi
+    else
+        echo "$(date --iso-8601=seconds): Checked $mitm_location, No attacker has connected yet to $container_name." >> /home/student/check_logs/recycling_debug.log
 
 fi
 else
-    echo "There is no mitm log associated with a container named $1"
+    echo "$(date --iso-8601=seconds): There is no mitm log associated with a container named $container_name" >> /home/student/check_logs/recycling_debug.log
