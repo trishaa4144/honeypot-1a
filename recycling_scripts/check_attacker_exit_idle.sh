@@ -20,7 +20,7 @@ if [[ $# -ne 1 ]]; then
 fi
 
 $container_name=$1
-
+echo "$(date --iso-8601=seconds): The container name is $container_name, AKA $1" >> /home/student/check_logs/recycling_debug.log
 if [[ -e /home/student/hpotinfo/mitm_location_$container_name ]]; then
     mitm_location=$(cat /home/student/hpotinfo/mitm_location_$container_name)
 
