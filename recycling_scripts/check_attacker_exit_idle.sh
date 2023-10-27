@@ -36,7 +36,7 @@ if [[ -e /home/student/hpotinfo/mitm_location_$container_name ]]; then
         echo "$container_name $goal_time" > /home/student/hpotinfo/time_$container_name
     fi
     else
-        echo "$(date --iso-8601=seconds): Checked $mitm_location, No attacker has connected yet to $container_name." >> /home/student/check_logs/recycling_debug.log
+        echo "$(date --iso-8601=seconds): Checked $mitm_location, No attacker has connected yet to $container_name" >> /home/student/check_logs/recycling_debug.log
 
 fi
 else
