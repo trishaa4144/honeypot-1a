@@ -41,3 +41,4 @@ if [[ -e /home/student/hpotinfo/mitm_location_$container_name ]]; then
 fi
 else
     echo "$(date --iso-8601=seconds): There is no mitm log associated with a container named $container_name" >> /home/student/check_logs/recycling_debug.log
+fi
