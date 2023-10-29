@@ -7,7 +7,6 @@ fi
 
 language=$1
 current_date=$(date --iso-8601)
-total_unique_ips=$(cat *"$current_date"* | grep "Attacker connected" | cut -d' ' -f8 | sort | uniq | wc -l)
 
 if [[ ! -d /home/student/data/ ]]; then
     mkdir /home/student/data/
@@ -23,6 +22,9 @@ fi
 
 # go into the mitm_logs folder of the particular language we want to assess
 cd /home/student/mitm_logs/$language
+
+# counts all unique IPs
+total_unique_ips=$(cat *$current_date* | grep "Attacker connected" | cut -d' ' -f8 | sort | uniq | wc -l)
 
 echo "Total number of unique IPs: $total_unique_ips" >> /home/student/data/$language/$current_date/ips.file
 # gets number of unique IP addresses of attackers & counts how many times each appears on the current date
