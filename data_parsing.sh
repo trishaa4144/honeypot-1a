@@ -7,7 +7,7 @@ fi
 
 language=$1
 current_date=$(date --iso-8601)
-total_unique_ips=$(cat * | grep "Attacker connected" | cut -d' ' -f8 | sort | uniq | wc -l) # ADD THE COMMAND HERE
+total_unique_ips=$(cat *$current_date* | grep "Attacker connected" | cut -d' ' -f8 | sort | uniq | wc -l)
 
 if [[ ! -d /home/student/data/ ]]; then
     mkdir /home/student/data/
@@ -24,14 +24,20 @@ fi
 # go into the mitm_logs folder of the particular language we want to assess
 cd /home/student/mitm_logs/$language
 
-# gets number of unique IP addresses of attackers & counts how many times each appears
-cat * | grep "Attacker connected" | cut -d " " -f8 | sort | uniq -c | sort -nr > /home/student/data/$language/$current_date/ips.file
+echo "Total number of unique IPs: $total_unique_ips" >> /home/student/data/$language/$current_date/ips.file
+# gets number of unique IP addresses of attackers & counts how many times each appears on the current date
+cat *$current_date* | grep "Attacker connected" | cut -d " " -f8 | sort | uniq -c | sort -nr >> /home/student/data/$language/$current_date/ips.file
 
-echo $total_unique_ips > /home/student/data/$language/$current_date/ips.file
+# gets the timestamp & interactive command entered in all sessions on the current date
+cat *$current_date* | grep -w "line from user" | colrm 1 11 | colrm 14 49 >> /home/student/data/$language/$current_date/interactive.file
 
-# gets all unique interactive commands entered by the attacker (and the number of times they were used)
-cat * | grep -w "line from reader" | cut -d " " -f9- | sort | uniq -c | sort -rn > /home/student/data/$language/$current_date/interactive.file
+# gets the timestamp & noninteractive command entered in all sessions on the current date
+cat *$current_date* | grep -w "Noninteractive" | colrm 1 11 | colrm 14 68 >> /home/student/data/$language/$current_date/noninteractive.file
 
-# gets all unique noninteractive commands entered by the attacker (and the number of times they were used)
-cat * | grep -w "Noninteractive" | cut -d " " -f10- | sort | uniq -c | sort -rn > /home/student/data/$language/$current_date/noninteractive.file
+# finally, gets the # of sessions & # of successful logins & puts them in the same file
+logins=$(cat *$current_date* | grep -w "LXC-Auth" | wc -l)
+sessions=$(ls *$current_date* | wc -l)
+
+echo "Number of successful logins: $logins" >> /home/student/data/$language/$current_date/session_logins.file
+echo "Number of sessions on $date: $sessions" >> /home/student/data/$language/$current_date/session_logins.file
 
