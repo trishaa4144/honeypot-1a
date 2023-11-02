@@ -12,7 +12,7 @@
 # for the purpose of this implementation. However, when deploying our 
 # honeypots, we can easily modify these two lines with correct names. 
 
-containers=("server1" "server2" "server3" "server4")
+containers=("server1" "server2" "server3" "server4" "server5")
 ips=("128.8.238.194" "128.8.238.101" "128.8.238.173" "128.8.238.212" "128.8.238.206")
 ports=("1297" "5420" "3956" "2145" "4532")
 
@@ -27,7 +27,7 @@ ports=("1297" "5420" "3956" "2145" "4532")
 # for a long time)
 minutes=$((RANDOM % 5 + 10))
 
-for index in {0..3}; do
+for index in {0..4}; do
 	echo "$(date --iso-8601=seconds): Checking all containers." >> /home/student/check_logs/recycling_debug.log
 	# Grab container name, ip address from arrays
 	container="${containers[$index]}"
