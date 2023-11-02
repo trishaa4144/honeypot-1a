@@ -13,8 +13,8 @@
 # honeypots, we can easily modify these two lines with correct names. 
 
 containers=("server1" "server2" "server3" "server4")
-ips=("128.8.238.194" "128.8.238.101" "128.8.238.173" "128.8.238.212")
-ports=("1297" "5420" "3956" "2145")
+ips=("128.8.238.194" "128.8.238.101" "128.8.238.173" "128.8.238.212" "128.8.238.206")
+ports=("1297" "5420" "3956" "2145" "4532")
 
 
 # Iterate through container/ip indices and call recycling script on
