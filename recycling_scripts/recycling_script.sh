@@ -42,6 +42,9 @@ if [[ -e /home/student/hpotinfo/time_$container_name ]]; then
     echo "container $container_name not ready to be recycled"
     exit 0
   else
+    # Prevent MITM check from happening during destruction process
+    rm -f /home/student/hpotinfo/mitm_location_$container_name
+
     echo "$(date --iso-8601=seconds): Time has come to recycle $container_name. Adding 20 minutes to timefile." >> /home/student/check_logs/recycling_debug.log
     # Add 10 minutes to time file for duration of honeypot destruction/cleanup process
     # This will prevent crontab from trying to recycle the honeypot twice concurrently.
@@ -71,7 +74,9 @@ if [[ -e /home/student/hpotinfo/time_$container_name ]]; then
 
     process=$(cat foreverlist | grep $container_name | cut -d " " -f6)
 
-    sudo forever stop "$process"
+    sudo /usr/bin/forever stop "$process"
+
+    echo "$(date --iso-8601=seconds): Deleted process $process to end MITM instance for $container_name." >> /home/student/check_logs/recycling_debug.log
 
     # Deletes the NAT rules that link the container to the MITM server
     sudo iptables --table nat --delete PREROUTING --source 0.0.0.0/0 --destination $ext_ip --jump DNAT --to-destination $container_ip
@@ -89,7 +94,6 @@ if [[ -e /home/student/hpotinfo/time_$container_name ]]; then
     echo "$container_name stopped at $(date --iso-8601=seconds)"
     rm -f /home/student/hpotinfo/honey_$container_name
     rm -f /home/student/hpotinfo/time_$container_name
-    rm -f /home/student/hpotinfo/mitm_location_$container_name
 
     sleep 5
 
@@ -147,7 +151,7 @@ else
   sudo sysctl -w net.ipv4.conf.all.route_localnet=1
 
   mitm_location="/home/student/mitm_logs/$honey_type/$container_name"_"$date.log"
-  sudo forever -l "$mitm_location" start /home/student/MITM/mitm.js -n "$container_name" -i "$container_ip" -p "$port_num" --auto-access --auto-access-fixed 1 --debug
+  sudo /usr/bin/forever -l "$mitm_location" start /home/student/MITM/mitm.js -n "$container_name" -i "$container_ip" -p "$port_num" --auto-access --auto-access-fixed 1 --debug
   echo $mitm_location > /home/student/hpotinfo/mitm_location_$container_name
 
   sudo ip addr add "$ext_ip"/24 brd + dev eth1
