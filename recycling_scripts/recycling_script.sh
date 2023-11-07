@@ -67,7 +67,7 @@ if [[ -e /home/student/hpotinfo/time_$container_name ]]; then
     # Done this way because after the first instance is done, the container after that to be deleted will be shifted up to uid 0,
     # so on and so forth
 
-    sudo forever list > foreverlist
+    sudo /usr/bin/forever list > foreverlist
 
     process=$(cat foreverlist | grep $container_name | cut -d " " -f6)
 
