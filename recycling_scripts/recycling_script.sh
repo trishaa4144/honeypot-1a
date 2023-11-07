@@ -73,6 +73,8 @@ if [[ -e /home/student/hpotinfo/time_$container_name ]]; then
 
     sudo forever stop "$process"
 
+    echo "$(date --iso-8601=seconds): Deleted process $process to end MITM instance for $container_name." >> /home/student/check_logs/recycling_debug.log
+
     # Deletes the NAT rules that link the container to the MITM server
     sudo iptables --table nat --delete PREROUTING --source 0.0.0.0/0 --destination $ext_ip --jump DNAT --to-destination $container_ip
 
