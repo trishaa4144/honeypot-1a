@@ -152,7 +152,7 @@ else
   sudo npm install -g forever
 
   mitm_location="/home/student/mitm_logs/$honey_type/$container_name"_"$date.log"
-  sudo forever -l "$mitm_location" start /home/student/MITM/mitm.js -n "$container_name" -i "$container_ip" -p "$port_num" --auto-access --auto-access-fixed 1 --debug
+  sudo /usr/bin/forever -l "$mitm_location" start /home/student/MITM/mitm.js -n "$container_name" -i "$container_ip" -p "$port_num" --auto-access --auto-access-fixed 1 --debug
   echo $mitm_location > /home/student/hpotinfo/mitm_location_$container_name
 
   sudo ip addr add "$ext_ip"/24 brd + dev eth1
