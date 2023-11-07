@@ -42,6 +42,9 @@ if [[ -e /home/student/hpotinfo/time_$container_name ]]; then
     echo "container $container_name not ready to be recycled"
     exit 0
   else
+    # Prevent MITM check from happening during destruction process
+    rm -f /home/student/hpotinfo/mitm_location_$container_name
+
     echo "$(date --iso-8601=seconds): Time has come to recycle $container_name. Adding 20 minutes to timefile." >> /home/student/check_logs/recycling_debug.log
     # Add 10 minutes to time file for duration of honeypot destruction/cleanup process
     # This will prevent crontab from trying to recycle the honeypot twice concurrently.
@@ -91,7 +94,6 @@ if [[ -e /home/student/hpotinfo/time_$container_name ]]; then
     echo "$container_name stopped at $(date --iso-8601=seconds)"
     rm -f /home/student/hpotinfo/honey_$container_name
     rm -f /home/student/hpotinfo/time_$container_name
-    rm -f /home/student/hpotinfo/mitm_location_$container_name
 
     sleep 5
 
