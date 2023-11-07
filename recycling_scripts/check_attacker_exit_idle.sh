@@ -22,13 +22,13 @@ if [[ -e /home/student/hpotinfo/mitm_location_$container_name ]]; then
         seconds=$((1 * 60))
         threshold_time=$((curr_time - seconds))
         if [[ $time_unix -le $threshold_time ]]; then
-            echo "$(date --iso-8601=seconds): MITM check - Auto-access was disabled on $container_name, updating its recycle time." >> /home/student/check_logs/recycling_debug.log
+            echo "$(date --iso-8601=seconds): MITM check - Checked $mitm_location, attacker disconnected over 2 minutes ago on $container_name, updating its recycle time to now." >> /home/student/check_logs/recycling_debug.log
             echo "$container_name $curr_time" > /home/student/hpotinfo/time_$container_name
         else
-            echo "$(date --iso-8601=seconds): MITM check - Auto-access was less than 2 minutes ago on $container_name, no need to recycle yet." >> /home/student/check_logs/recycling_debug.log
+            echo "$(date --iso-8601=seconds): MITM check - Checked $mitm_location, disconnect was less than 2 minutes ago on $container_name, no need to recycle yet." >> /home/student/check_logs/recycling_debug.log
         fi
     else
-        echo "$(date --iso-8601=seconds): MITM check - Checked $mitm_location, No attacker has connected yet to $container_name" >> /home/student/check_logs/recycling_debug.log
+        echo "$(date --iso-8601=seconds): MITM check - Checked $mitm_location, no attacker has disconnected yet from $container_name" >> /home/student/check_logs/recycling_debug.log
     fi
 
 else
