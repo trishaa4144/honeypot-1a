@@ -42,11 +42,11 @@ if [[ -e /home/student/hpotinfo/time_$container_name ]]; then
     echo "container $container_name not ready to be recycled"
     exit 0
   else
-    echo "$(date --iso-8601=seconds): Time has come to recycle $container_name. Adding 10 minutes to timefile." >> /home/student/check_logs/recycling_debug.log
+    echo "$(date --iso-8601=seconds): Time has come to recycle $container_name. Adding 20 minutes to timefile." >> /home/student/check_logs/recycling_debug.log
     # Add 10 minutes to time file for duration of honeypot destruction/cleanup process
     # This will prevent crontab from trying to recycle the honeypot twice concurrently.
     curr_time=$(date +"%s")
-    seconds=$((10 * 60))
+    seconds=$((20 * 60))
     goal_time=$((curr_time + seconds))
     echo "$container_name $goal_time" > /home/student/hpotinfo/time_$container_name
 

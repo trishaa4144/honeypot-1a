@@ -9,7 +9,7 @@ echo "$(date --iso-8601=seconds): MITM check - Checking MITM log for attackers i
 
 if [[ -e /home/student/hpotinfo/mitm_location_$container_name ]]; then
     mitm_location=$(cat /home/student/hpotinfo/mitm_location_$container_name)
-    time_line=$(grep "Attacker closed the connection" "$mitm_location")    
+    time_line=$(awk '/Attacker closed/ {print; exit}' "$mitm_location")    
 
     # If auto access has been disabled at some point in the file, update the time file to
     # be the current time + 2 minutes (since this is checked every 2 minutes, effectively
@@ -19,7 +19,7 @@ if [[ -e /home/student/hpotinfo/mitm_location_$container_name ]]; then
         time=$(echo "$time_line" | awk '{print $1, $2}')
         time_unix=$(date -d "$time" "+%s")
         curr_time=$(date +"%s")
-        seconds=$((2 * 60))
+        seconds=$((1 * 60))
         threshold_time=$((curr_time - seconds))
         if [[ $time_unix -le $threshold_time ]]; then
             echo "$(date --iso-8601=seconds): MITM check - Auto-access was disabled on $container_name, updating its recycle time." >> /home/student/check_logs/recycling_debug.log
