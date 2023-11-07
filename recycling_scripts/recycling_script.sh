@@ -74,7 +74,7 @@ if [[ -e /home/student/hpotinfo/time_$container_name ]]; then
 
     process=$(cat foreverlist | grep $container_name | cut -d " " -f6)
 
-    sudo forever stop "$process"
+    sudo /usr/bin/forever stop "$process"
 
     echo "$(date --iso-8601=seconds): Deleted process $process to end MITM instance for $container_name." >> /home/student/check_logs/recycling_debug.log
 
