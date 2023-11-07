@@ -9,7 +9,7 @@ echo "$(date --iso-8601=seconds): MITM check - Checking MITM log for attackers i
 
 if [[ -e /home/student/hpotinfo/mitm_location_$container_name ]]; then
     mitm_location=$(cat /home/student/hpotinfo/mitm_location_$container_name)
-    time_line=$(awk '/Attacker closed connection/ {print; exit}' "$mitm_location")    
+    time_line=$(awk '/Attacker closed/ {print; exit}' "$mitm_location")    
 
     # If auto access has been disabled at some point in the file, update the time file to
     # be the current time + 2 minutes (since this is checked every 2 minutes, effectively
