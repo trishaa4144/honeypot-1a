@@ -145,7 +145,6 @@ else
   date=$(date --iso-8601=seconds)
 
   sudo sysctl -w net.ipv4.conf.all.route_localnet=1
-  sudo npm install -g forever
 
   mitm_location="/home/student/mitm_logs/$honey_type/$container_name"_"$date.log"
   sudo forever -l "$mitm_location" start /home/student/MITM/mitm.js -n "$container_name" -i "$container_ip" -p "$port_num" --auto-access --auto-access-fixed 1 --debug
