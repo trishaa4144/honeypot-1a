@@ -19,7 +19,7 @@ if [[ -e /home/student/hpotinfo/mitm_location_$container_name ]]; then
         time=$(echo "$time_line" | awk '{print $1, $2}')
         time_unix=$(date -d "$time" "+%s")
         curr_time=$(date +"%s")
-        seconds=$((2 * 60))
+        seconds=$((1 * 60))
         threshold_time=$((curr_time - seconds))
         if [[ $time_unix -le $threshold_time ]]; then
             echo "$(date --iso-8601=seconds): MITM check - Auto-access was disabled on $container_name, updating its recycle time." >> /home/student/check_logs/recycling_debug.log
